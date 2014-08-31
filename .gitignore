@@ -22,10 +22,7 @@ yeoman
 nbproject
 .sass-cache
 
-desktop_build
-mobile_build
-tablet_build
-
-tracks
+downloaded_tracks
+client_build
 
 configuration.js
