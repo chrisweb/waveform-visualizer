@@ -2,7 +2,7 @@
   "name": "waveform-visualizer",
   "version": "0.0.1",
   "description": "nodejs and web audio api waveform visualizer",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "none yet"
   },
