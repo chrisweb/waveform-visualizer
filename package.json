@@ -1,0 +1,27 @@
+{
+  "name": "waveform-visualizer",
+  "version": "0.0.1",
+  "description": "nodejs and web audio api waveform visualizer",
+  "main": "index.js",
+  "scripts": {
+    "test": "none yet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisweb/waveform-visualizer.git"
+  },
+  "keywords": [
+    "waveform",
+    "nodejs",
+    "javascript",
+    "web",
+    "audio",
+    "api"
+  ],
+  "author": "Chris Weber (chrisweb) <chris963@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisweb/waveform-visualizer/issues"
+  },
+  "homepage": "https://github.com/chrisweb/waveform-visualizer"
+}
