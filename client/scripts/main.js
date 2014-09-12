@@ -9,8 +9,9 @@
  * 
  */
 require.config({
-    baseUrl: '/client/scripts',
+    baseUrl: '/scripts',
     paths: {
+        'jquery': 'vendor/jquery/dist/jquery',
         'waveform': 'library/waveform'
     }
     
@@ -20,13 +21,15 @@ require.config({
  * 
  *  main require
  * 
+ * @param {type} $
  * @param {type} waveform
  * @returns {undefined}
  */
 require([
+    'jquery',
     'waveform'
     
-], function (waveform) {
+], function ($, waveform) {
     
     // on dom load
     $(function() {
