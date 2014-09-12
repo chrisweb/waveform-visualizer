@@ -22,21 +22,19 @@ define([
         
     };
     
+    var audioContext;
+    
     var getAudioContext = function getAudioContextFunction() {
         
         var AudioContext = window.AudioContext || window.webkitAudioContext;
         
-        var audioContext = new AudioContext();
-        
-        return audioContext;
+        audioContext = new AudioContext();
         
     };
 
     var initialize = function initializeFunction() {
 
-        
-        
-        
+        getAudioContext();
         
     };
     
