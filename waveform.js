@@ -89,7 +89,29 @@ define([
             canvasContext.stroke();
             
         }
+        
+        addClickListener($element);
 
+    };
+    
+    var addClickListener = function addClickListenerFunction($element) {
+        
+        $element.on('click', function(event) {
+            
+            getMousePosition($element, event);
+            
+        });
+        
+    };
+    
+    var getMousePosition = function getMousePositionFunction($element, event) {
+        
+        var boundingClientRectangle = $element[0].getBoundingClientRect();
+        
+        var position = event.clientX - boundingClientRectangle.left;
+        
+        console.log(position);
+        
     };
     
     var audioContext;
