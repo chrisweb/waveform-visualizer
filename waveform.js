@@ -59,9 +59,37 @@ define([
         console.log(options);
         
         var canvasContext = getCanvasContext($element);
+        var peaksLength = data.length;
+        var canvasHeight = options.waveHeight * 2;
+        var canvasWidth = (peaksLength * options.peakWidth) + ((peaksLength - 1) * options.spaceWidth);
+        var peakColor = options.peakColorHex;
         
+        $element.attr('height', canvasHeight);
+        $element.attr('width', canvasWidth);
         
+        canvasContext.fillStyle = '#ffffff';
+        canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         
+        var i;
+        
+        canvasContext.lineWidth = options.peakWidth;
+        
+        var heightPercentage = options.waveHeight / 100;
+        
+        for (i = 0; i < peaksLength; i += 2) {
+            
+            var peakHeightInPercent = data[i];
+            
+            var peakBottom = i * (options.peakWidth + options.spaceWidth);
+            var peakHeight = options.waveHeight + (heightPercentage * peakHeightInPercent);
+            
+            canvasContext.beginPath();
+            canvasContext.moveTo(peakBottom, options.waveHeight);
+            canvasContext.lineTo(peakBottom, peakHeight);
+            canvasContext.stroke();
+            
+        }
+
     };
     
     var audioContext;
