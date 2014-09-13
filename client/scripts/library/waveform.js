@@ -67,7 +67,7 @@ define([
         $element.attr('height', canvasHeight);
         $element.attr('width', canvasWidth);
         
-        canvasContext.fillStyle = '#ffffff';
+        canvasContext.fillStyle = '#ffff00';
         canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         
         var i;
@@ -76,12 +76,12 @@ define([
         
         var heightPercentage = options.waveHeight / 100;
         
-        for (i = 0; i < peaksLength; i += 2) {
+        for (i = 0; i < peaksLength; i++) {
             
             var peakHeightInPercent = data[i];
             
-            var peakBottom = i * (options.peakWidth + options.spaceWidth);
-            var peakHeight = options.waveHeight + (heightPercentage * peakHeightInPercent);
+            var peakBottom = ((i + 1) * options.peakWidth) + (i * options.spaceWidth);
+            var peakHeight = options.waveHeight - (heightPercentage * peakHeightInPercent);
             
             canvasContext.beginPath();
             canvasContext.moveTo(peakBottom, options.waveHeight);
