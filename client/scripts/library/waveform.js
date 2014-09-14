@@ -18,12 +18,16 @@ define([
      * 
      * get the peaks data from server
      * 
-     * @type type
+     * @param {type} trackId
+     * @param {type} trackFormat
+     * @param {type} peaksAmount
+     * @param {type} callback
+     * @returns {undefined}
      */
-    var getWaveDataFromServer = function getWaveDataFromServerFunction(trackId, peaksAmount, callback) {
+    var getWaveDataFromServer = function getWaveDataFromServerFunction(trackId, trackFormat, peaksAmount, callback) {
         
         var request = $.ajax({
-            url: '/getwavedata?trackId=' + trackId + '&peaksAmount=' + peaksAmount,
+            url: '/getwavedata?trackId=' + trackId + '&trackFormat=' + trackFormat + '&peaksAmount=' + peaksAmount,
             type: 'GET',
             dataType: 'json'
         });
@@ -62,7 +66,10 @@ define([
      * 
      * draw the canvas wave form
      * 
-     * @type type
+     * @param {type} data
+     * @param {type} $element
+     * @param {type} options
+     * @returns {undefined}
      */
     var drawWave = function drawWaveFunction(data, $element, options) {
 
@@ -106,7 +113,8 @@ define([
      * 
      * add a click listener to the canvas waveform
      * 
-     * @type type
+     * @param {type} $element
+     * @returns {undefined}
      */
     var addClickListener = function addClickListenerFunction($element) {
         
@@ -122,7 +130,9 @@ define([
      * 
      * get the mouse position of the click on the canvas
      * 
-     * @type type
+     * @param {type} $element
+     * @param {type} event
+     * @returns {undefined}
      */
     var getMousePosition = function getMousePositionFunction($element, event) {
         
@@ -138,7 +148,8 @@ define([
      * 
      * get the canvas context from canvas element
      * 
-     * @type type
+     * @param {type} $element
+     * @returns {unresolved}
      */
     var getCanvasContext = function getCanvasContextFunction($element) {
         
@@ -154,7 +165,7 @@ define([
      * 
      * get the web audio api audiocontext
      * 
-     * @type type
+     * @returns {undefined}
      */
     var getAudioContext = function getAudioContextFunction() {
         
@@ -163,12 +174,79 @@ define([
         audioContext = new AudioContext();
         
     };
+    
+    /**
+     * 
+     * get a track stream from server
+     * 
+     * @param {type} trackId
+     * @param {type} trackFormat
+     * @param {type} callback
+     * @returns {undefined}
+     */
+    var getAudioStream = function getAudioStreamFunction(trackId, trackFormat, callback) {
+        
+        var xhr = new XMLHttpRequest();
+        
+        xhr.open('GET', '/getTrack?trackId=' + trackId + '&trackFormat=' + trackFormat, true);
+        xhr.responseType = 'arraybuffer';
+        xhr.send();
+        
+        xhr.onload = function() {
+        
+            audioContext.decodeAudioData(xhr.response, function onSuccess(decodedBuffer) {
+                
+                callback(false, decodedBuffer);
+                
+            }, function onFailure() {
+                
+                callback('decoding the buffer failed');
+                
+            });
+            
+        };
+        
+        
+        
+    };
+    
+    /**
+     * 
+     * analyze the track using the client web audio api
+     * 
+     * @param {type} trackId
+     * @param {type} trackFormat
+     * @returns {undefined}
+     */
+    var analyzeTrack = function analyzeTrackFunction(trackId, trackFormat) {
+        
+        var analyser = audioContext.createAnalyser();
+        
+        // get the audio buffer
+        getAudioStream(trackId, trackFormat, function(error, buffer) {
+            
+            if (!error) {
+                
+                console.log(buffer);
+                
+                
+                
+            } else {
+                
+                // log the server error
+                console.log(error);
+                
+            }
+            
+        });
+        
+    };
 
     /**
      * 
      * initialize the waveform module
      * 
-     * @type type
+     * @returns {undefined}
      */
     var initialize = function initializeFunction() {
 
@@ -182,7 +260,8 @@ define([
     return {
         init: initialize,
         draw: drawWave,
-        getDataFromServer: getWaveDataFromServer
+        getDataFromServer: getWaveDataFromServer,
+        analyze: analyzeTrack
     };
 
 });
