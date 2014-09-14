@@ -14,6 +14,12 @@ define([
 
     'use strict';
     
+    /**
+     * 
+     * get the peaks data from server
+     * 
+     * @type type
+     */
     var getWaveDataFromServer = function getWaveDataFromServerFunction(trackId, peaksAmount, callback) {
         
         var request = $.ajax({
@@ -52,12 +58,14 @@ define([
         
     };
     
+    /**
+     * 
+     * draw the canvas wave form
+     * 
+     * @type type
+     */
     var drawWave = function drawWaveFunction(data, $element, options) {
-        
-        console.log(data);
-        console.log($element);
-        console.log(options);
-        
+
         var canvasContext = getCanvasContext($element);
         var peaksLength = data.length;
         var canvasHeight = options.waveHeight * 2;
@@ -94,6 +102,12 @@ define([
 
     };
     
+    /**
+     * 
+     * add a click listener to the canvas waveform
+     * 
+     * @type type
+     */
     var addClickListener = function addClickListenerFunction($element) {
         
         $element.on('click', function(event) {
@@ -104,6 +118,12 @@ define([
         
     };
     
+    /**
+     * 
+     * get the mouse position of the click on the canvas
+     * 
+     * @type type
+     */
     var getMousePosition = function getMousePositionFunction($element, event) {
         
         var boundingClientRectangle = $element[0].getBoundingClientRect();
@@ -114,16 +134,12 @@ define([
         
     };
     
-    var audioContext;
-    
-    var getAudioContext = function getAudioContextFunction() {
-        
-        var AudioContext = window.AudioContext || window.webkitAudioContext;
-        
-        audioContext = new AudioContext();
-        
-    };
-    
+    /**
+     * 
+     * get the canvas context from canvas element
+     * 
+     * @type type
+     */
     var getCanvasContext = function getCanvasContextFunction($element) {
         
         var canvasContext = $element[0].getContext('2d');
@@ -131,13 +147,38 @@ define([
         return canvasContext;
         
     };
+    
+    var audioContext;
+    
+    /**
+     * 
+     * get the web audio api audiocontext
+     * 
+     * @type type
+     */
+    var getAudioContext = function getAudioContextFunction() {
+        
+        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        
+        audioContext = new AudioContext();
+        
+    };
 
+    /**
+     * 
+     * initialize the waveform module
+     * 
+     * @type type
+     */
     var initialize = function initializeFunction() {
 
         getAudioContext();
         
     };
     
+    /**
+     * public functions
+     */
     return {
         init: initialize,
         draw: drawWave,
