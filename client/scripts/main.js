@@ -58,6 +58,10 @@ require([
                 // draw the waveform using the waveform module
                 waveform.draw(data, $element, options);
                 
+                
+                // CLIENT SIDE WAVEFORM
+                waveform.init();
+                
                 // analyze track again but this time using the client
                 // web audio api
                 waveform.analyze(trackId, trackFormat);
