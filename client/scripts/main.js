@@ -34,16 +34,19 @@ require([
     // on dom load
     $(function() {
 
-        var trackId = 1135703;
-        var peaksAmount = 200;
+        var trackId = 1100511;
+        var peaksAmount = 400;
         
         // paint a waveform using server data
         waveform.getDataFromServer(trackId, peaksAmount, function(error, data) {
             
+            // if there was no error on the server
             if (!error) {
             
+                // get the canvas element
                 var $element = $('#serverWaveForm');
 
+                // set the optioms
                 var options = {};
 
                 options.waveHeight = 100;
@@ -51,10 +54,12 @@ require([
                 options.spaceWidth = 1;
                 options.peakColorHex = '#6600FF';
 
+                // draw the waveform using the waveform module
                 waveform.draw(data, $element, options);
                 
             } else {
                 
+                // log the server error
                 console.log(error);
                 
             }
