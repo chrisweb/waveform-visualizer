@@ -36,9 +36,10 @@ require([
 
         var trackId = 1100511;
         var peaksAmount = 400;
+        var trackFormat = 'ogg';
         
         // paint a waveform using server data
-        waveform.getDataFromServer(trackId, peaksAmount, function(error, data) {
+        waveform.getDataFromServer(trackId, trackFormat, peaksAmount, function(error, data) {
             
             // if there was no error on the server
             if (!error) {
@@ -56,6 +57,10 @@ require([
 
                 // draw the waveform using the waveform module
                 waveform.draw(data, $element, options);
+                
+                // analyze track again but this time using the client
+                // web audio api
+                waveform.analyze(trackId, trackFormat);
                 
             } else {
                 
