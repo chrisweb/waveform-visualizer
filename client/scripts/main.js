@@ -12,24 +12,37 @@ require.config({
     baseUrl: '/scripts',
     paths: {
         'jquery': 'vendor/jquery/dist/jquery',
-        'waveform': 'library/waveform'
+        'waveform': 'library/waveform',
+        'player': 'library/player',
+        'ajax': 'library/ajax',
+        'audio': 'library/audio',
+        'canvas': 'library/canvas',
+        'analyzer': 'library/analyzer'
     }
     
 });
 
 /**
  * 
- *  main require
+ * main require
  * 
  * @param {type} $
- * @param {type} waveform
+ * @param {type} ajax
+ * @param {type} Waveform
+ * @param {type} canvas
+ * @param {type} audio
+ * @param {type} Player
  * @returns {undefined}
  */
 require([
     'jquery',
-    'waveform'
+    'ajax',
+    'waveform',
+    'canvas',
+    'audio',
+    'player'
     
-], function ($, waveform) {
+], function ($, ajax, Waveform, canvas, audio, Player) {
     
     // on dom load
     $(function() {
@@ -38,14 +51,18 @@ require([
         var peaksAmount = 400;
         var trackFormat = 'ogg';
         
+        // get the canvas element
+        var $element = $('#serverWaveForm');
+                
+        var canvasContext = canvas.getContext($element);
+                
+        var waveform = new Waveform({ canvasContext: canvasContext });
+        
         // paint a waveform using server data
-        waveform.getDataFromServer(trackId, trackFormat, peaksAmount, function(error, data) {
+        ajax.getWaveDataFromServer(trackId, trackFormat, peaksAmount, function(error, data) {
             
             // if there was no error on the server
             if (!error) {
-            
-                // get the canvas element
-                var $element = $('#serverWaveForm');
 
                 // set the optioms
                 var options = {};
@@ -56,15 +73,62 @@ require([
                 options.peakColorHex = '#6600FF';
 
                 // draw the waveform using the waveform module
-                waveform.draw(data, $element, options);
+                waveform.draw(data, options);
                 
+            } else {
                 
-                // CLIENT SIDE WAVEFORM
-                waveform.init();
+                // log the server error
+                console.log(error);
                 
+            }
+            
+        });
+        
+        var audioContext = audio.getContext();
+        
+        ajax.getAudioBuffer(trackId, trackFormat, audioContext, function(error, trackBuffer) {
+            
+            // if there was no error on the server
+            if (!error) {
+
                 // analyze track again but this time using the client
                 // web audio api
-                waveform.analyze(trackId, trackFormat);
+                //analyzer.analyzeTrack(trackBuffer);
+
+                // player
+                var player = new Player({ audioContext: audioContext });
+                
+                player.setBuffer(trackBuffer);
+                
+                var $button = $('<button>');
+                
+                $button.addClass('play').text('>');
+                
+                var $body = $('body');
+                
+                $body.find('.player').append($button);
+                
+                $body.on('click', 'button', function() {
+                    
+                    if ($(this).hasClass('play')) {
+                    
+                        player.play();
+                        
+                        $button.removeClass('play').addClass('pause').text('||');
+                        
+                        waveform.updateRangeStart();
+                        
+                    } else {
+                        
+                        player.pause();
+                        
+                        $button.removeClass('pause').addClass('play').text('>');
+                        
+                        waveform.updateRangeStop();
+                        
+                    }
+                    
+                });
                 
             } else {
                 
