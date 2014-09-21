@@ -16,6 +16,8 @@ define([
     
     var canvasContext;
     var $canvasElement;
+    var waveData;
+    var waveLayoutOptions;
     
     /**
      * 
@@ -36,6 +38,18 @@ define([
                 
             }
             
+            if (options.data !== undefined) {
+                
+                this.setWaveData(options.data);
+                
+            }
+            
+            if (options.layout !== undefined) {
+                
+                this.setLayoutOptions(options.layout);
+                
+            }            
+            
         }
         
     };
@@ -44,16 +58,14 @@ define([
      * 
      * draw the canvas wave form
      * 
-     * @param {type} data
-     * @param {type} options
      * @returns {undefined}
      */
-    waveform.prototype.draw = function drawWaveFunction(data, options) {
+    waveform.prototype.draw = function drawWaveFunction(range) {
 
-        var peaksLength = data.length;
-        var canvasHeight = options.waveHeight * 2;
-        var canvasWidth = (peaksLength * options.peakWidth) + ((peaksLength - 1) * options.spaceWidth);
-        var peakColor = options.peakColorHex;
+        var peaksLength = waveData.length;
+        var canvasHeight = waveLayoutOptions.waveHeight * 2;
+        var canvasWidth = (peaksLength * waveLayoutOptions.peakWidth) + ((peaksLength - 1) * waveLayoutOptions.spaceWidth);
+        var peakColor = waveLayoutOptions.peakColorHex;
         
         $canvasElement.attr('height', canvasHeight);
         $canvasElement.attr('width', canvasWidth);
@@ -63,27 +75,33 @@ define([
         
         var i;
         
-        canvasContext.lineWidth = options.peakWidth;
+        canvasContext.lineWidth = waveLayoutOptions.peakWidth;
         
-        var heightPercentage = options.waveHeight / 100;
+        var heightPercentage = waveLayoutOptions.waveHeight / 100;
         
         for (i = 0; i < peaksLength; i++) {
             
-            var peakHeightInPercent = data[i];
+            var peakHeightInPercent = waveData[i];
             
-            var peakHorizontalPosition = ((i + 1) * options.peakWidth) + (i * options.spaceWidth);
-            var peakHeight = options.waveHeight - (heightPercentage * peakHeightInPercent);
+            var peakHorizontalPosition = ((i + 1) * waveLayoutOptions.peakWidth) + (i * waveLayoutOptions.spaceWidth);
+            var peakHeight = waveLayoutOptions.waveHeight - (heightPercentage * peakHeightInPercent);
+            
+            if (range !== undefined) {
+                
+                // TODO
+                
+            }
             
             // waveform top
             canvasContext.beginPath();
-            canvasContext.moveTo(peakHorizontalPosition, options.waveHeight);
+            canvasContext.moveTo(peakHorizontalPosition, waveLayoutOptions.waveHeight);
             canvasContext.lineTo(peakHorizontalPosition, peakHeight);
             canvasContext.strokeStyle = '#b57ec1';
             canvasContext.stroke();
             
             // waveform bottom
             canvasContext.beginPath();
-            canvasContext.moveTo(peakHorizontalPosition, options.waveHeight);
+            canvasContext.moveTo(peakHorizontalPosition, waveLayoutOptions.waveHeight);
             canvasContext.lineTo(peakHorizontalPosition, canvasHeight-peakHeight);
             canvasContext.strokeStyle = '#c0a5c6';
             canvasContext.stroke();
@@ -143,6 +161,32 @@ define([
         
     };
     
+    /**
+     * 
+     * set wave data
+     * 
+     * @param {type} data
+     * @returns {undefined}
+     */
+    waveform.prototype.setWaveData = function setWaveDataFunction(data) {
+        
+        waveData = data;
+        
+    };
+
+    /**
+     * 
+     * set layout options
+     * 
+     * @param {type} layoutOptions
+     * @returns {undefined}
+     */
+    waveform.prototype.setLayoutOptions = function setLayoutOptionsFunction(layoutOptions) {
+        
+        waveLayoutOptions = layoutOptions;
+        
+    };
+
     var drawStop = false;
     var frameHandle;
     
@@ -153,12 +197,19 @@ define([
      * @returns {undefined}
      */
     var drawRange = function drawRangeFunction() {
+        
+        var that = this;
 
         var frameHandle = requestFrame(function() {
 
             if (!drawStop) {
+                
+                var range = Math.floor((Math.random() * 100) + 1);
+                
+                // redraw wave with different color until song progress
+                that.draw(range);
             
-                drawRange();
+                drawRange.call(that);
             
             }
             
@@ -175,7 +226,7 @@ define([
         
         drawStop = false;
 
-        drawRange();
+        drawRange.call(this);
         
     };
     
