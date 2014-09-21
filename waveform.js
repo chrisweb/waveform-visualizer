@@ -14,51 +14,29 @@ define([
 
     'use strict';
     
+    var canvasContext;
+    var $canvasElement;
+    
     /**
      * 
-     * get the peaks data from server
+     * waveform constructor
      * 
-     * @param {type} trackId
-     * @param {type} trackFormat
-     * @param {type} peaksAmount
-     * @param {type} callback
+     * @param {type} options
      * @returns {undefined}
      */
-    var getWaveDataFromServer = function getWaveDataFromServerFunction(trackId, trackFormat, peaksAmount, callback) {
+    var waveform = function waveformConstructor(options) {
         
-        var request = $.ajax({
-            url: '/getwavedata?trackId=' + trackId + '&trackFormat=' + trackFormat + '&peaksAmount=' + peaksAmount,
-            type: 'GET',
-            dataType: 'json'
-        });
-
-        request.done(function(data) {
+        if (options !== undefined) {
             
-            if (typeof data !== 'undefined' && data.peaks !== undefined) {
-            
-                callback(false, data.peaks);
-            
-            } else {
+            if (options.canvasContext !== undefined) {
                 
-                if (typeof data === 'undefined' || data.error === undefined) {
-                    
-                    callback('undefined response from server');
-                    
-                } else {
-                    
-                    callback(data.error);
-                    
-                }
-        
+                this.setCanvasContext(options.canvasContext);
+                
+                //console.log(canvasContext);
+                
             }
             
-        });
-
-        request.fail(function(jqXHR, textStatus) {
-            
-            callback(textStatus);
-            
-        });
+        }
         
     };
     
@@ -67,22 +45,20 @@ define([
      * draw the canvas wave form
      * 
      * @param {type} data
-     * @param {type} $element
      * @param {type} options
      * @returns {undefined}
      */
-    var drawWave = function drawWaveFunction(data, $element, options) {
+    waveform.prototype.draw = function drawWaveFunction(data, options) {
 
-        var canvasContext = getCanvasContext($element);
         var peaksLength = data.length;
         var canvasHeight = options.waveHeight * 2;
         var canvasWidth = (peaksLength * options.peakWidth) + ((peaksLength - 1) * options.spaceWidth);
         var peakColor = options.peakColorHex;
         
-        $element.attr('height', canvasHeight);
-        $element.attr('width', canvasWidth);
+        $canvasElement.attr('height', canvasHeight);
+        $canvasElement.attr('width', canvasWidth);
         
-        canvasContext.fillStyle = '#ffff00';
+        canvasContext.fillStyle = '#d9d9d9';
         canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         
         var i;
@@ -95,17 +71,26 @@ define([
             
             var peakHeightInPercent = data[i];
             
-            var peakBottom = ((i + 1) * options.peakWidth) + (i * options.spaceWidth);
+            var peakHorizontalPosition = ((i + 1) * options.peakWidth) + (i * options.spaceWidth);
             var peakHeight = options.waveHeight - (heightPercentage * peakHeightInPercent);
             
+            // waveform top
             canvasContext.beginPath();
-            canvasContext.moveTo(peakBottom, options.waveHeight);
-            canvasContext.lineTo(peakBottom, peakHeight);
+            canvasContext.moveTo(peakHorizontalPosition, options.waveHeight);
+            canvasContext.lineTo(peakHorizontalPosition, peakHeight);
+            canvasContext.strokeStyle = '#b57ec1';
+            canvasContext.stroke();
+            
+            // waveform bottom
+            canvasContext.beginPath();
+            canvasContext.moveTo(peakHorizontalPosition, options.waveHeight);
+            canvasContext.lineTo(peakHorizontalPosition, canvasHeight-peakHeight);
+            canvasContext.strokeStyle = '#c0a5c6';
             canvasContext.stroke();
             
         }
         
-        addClickListener($element);
+        addClickListener();
 
     };
     
@@ -113,14 +98,13 @@ define([
      * 
      * add a click listener to the canvas waveform
      * 
-     * @param {type} $element
      * @returns {undefined}
      */
-    var addClickListener = function addClickListenerFunction($element) {
+    var addClickListener = function addClickListenerFunction() {
         
-        $element.on('click', function(event) {
+        $canvasElement.on('click', function(event) {
             
-            getMousePosition($element, event);
+            getMousePosition($canvasElement, event);
             
         });
         
@@ -146,122 +130,98 @@ define([
     
     /**
      * 
-     * get the canvas context from canvas element
+     * set the canvas context
      * 
-     * @param {type} $element
-     * @returns {unresolved}
+     * @param {type} context
+     * @returns {undefined}
      */
-    var getCanvasContext = function getCanvasContextFunction($element) {
+    waveform.prototype.setCanvasContext = function setCanvasContextFunction(context) {
         
-        var canvasContext = $element[0].getContext('2d');
+        canvasContext = context;
         
-        return canvasContext;
+        $canvasElement = $(canvasContext.canvas);
         
     };
     
-    var audioContext;
+    var drawStop = false;
+    var frameHandle;
     
     /**
      * 
-     * get the web audio api audiocontext
+     * update the range display in the waveform
      * 
      * @returns {undefined}
      */
-    var getAudioContext = function getAudioContextFunction() {
-        
-        var AudioContext = window.AudioContext || window.webkitAudioContext;
-        
-        audioContext = new AudioContext();
-        
-    };
-    
-    /**
-     * 
-     * get a track stream from server
-     * 
-     * @param {type} trackId
-     * @param {type} trackFormat
-     * @param {type} callback
-     * @returns {undefined}
-     */
-    var getAudioStream = function getAudioStreamFunction(trackId, trackFormat, callback) {
-        
-        var xhr = new XMLHttpRequest();
-        
-        xhr.open('GET', '/getTrack?trackId=' + trackId + '&trackFormat=' + trackFormat, true);
-        xhr.responseType = 'arraybuffer';
-        xhr.send();
-        
-        xhr.onload = function() {
-        
-            audioContext.decodeAudioData(xhr.response, function onSuccess(decodedBuffer) {
-                
-                callback(false, decodedBuffer);
-                
-            }, function onFailure() {
-                
-                callback('decoding the buffer failed');
-                
-            });
+    var drawRange = function drawRangeFunction() {
+
+        var frameHandle = requestFrame(function() {
+
+            if (!drawStop) {
             
-        };
-        
-        
-        
-    };
-    
-    /**
-     * 
-     * analyze the track using the client web audio api
-     * 
-     * @param {type} trackId
-     * @param {type} trackFormat
-     * @returns {undefined}
-     */
-    var analyzeTrack = function analyzeTrackFunction(trackId, trackFormat) {
-        
-        var analyser = audioContext.createAnalyser();
-        
-        // get the audio buffer
-        getAudioStream(trackId, trackFormat, function(error, buffer) {
+                drawRange();
             
-            if (!error) {
-                
-                console.log(buffer);
-                
-                
-                
-            } else {
-                
-                // log the server error
-                console.log(error);
-                
             }
             
         });
         
     };
-
+    
     /**
      * 
-     * initialize the waveform module
+     * start updating range
      * 
-     * @returns {undefined}
      */
-    var initialize = function initializeFunction() {
+    waveform.prototype.updateRangeStart = function drawRangeFunction() {
+        
+        drawStop = false;
 
-        getAudioContext();
+        drawRange();
         
     };
     
     /**
+     * 
+     * stop updating range
+     * 
+     * @returns {undefined}
+     */
+    waveform.prototype.updateRangeStop = function updateRangeStopFunction() {
+        
+        drawStop = true;
+        
+        if (typeof frameHandle !== 'undefined') {
+            
+            clearInterval(frameHandle);
+            
+        }
+        
+    };
+
+    /**
+     * 
+     * request (animation) frame
+     * 
+     * @param {type} callback
+     * @returns {Window.requestAnimationFrame|window.requestAnimationFrame|Function|window.oRequestAnimationFrame|Window.oRequestAnimationFrame|Window.webkitRequestAnimationFrame|window.webkitRequestAnimationFrame|Window.msRequestAnimationFrame|window.msRequestAnimationFrame|Window.mozRequestAnimationFrame|window.mozRequestAnimationFrame}
+     */
+    var requestFrame = (function requestFrameFunction(callback) {
+        
+        // requestAnimationFrame() shim by Paul Irish
+        // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+        return  window.requestAnimationFrame       || 
+                window.webkitRequestAnimationFrame || 
+                window.mozRequestAnimationFrame    || 
+                window.oRequestAnimationFrame      || 
+                window.msRequestAnimationFrame     || 
+                function(callback){
+                    frameHandle = window.setTimeout(callback, 1000 / 60);
+                };
+        
+    })();
+    
+    /**
      * public functions
      */
-    return {
-        init: initialize,
-        draw: drawWave,
-        getDataFromServer: getWaveDataFromServer,
-        analyze: analyzeTrack
-    };
+    return waveform;
 
 });
