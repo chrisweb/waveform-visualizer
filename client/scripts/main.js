@@ -56,7 +56,9 @@ require([
                 
         var canvasContext = canvas.getContext($element);
                 
-        var waveform = new Waveform({ canvasContext: canvasContext });
+        var waveform = new Waveform({
+            canvasContext: canvasContext
+        });
         
         // paint a waveform using server data
         ajax.getWaveDataFromServer(trackId, trackFormat, peaksAmount, function(error, data) {
@@ -64,16 +66,21 @@ require([
             // if there was no error on the server
             if (!error) {
 
-                // set the optioms
-                var options = {};
+                // set waveform data
+                waveform.setWaveData(data);
 
-                options.waveHeight = 100;
-                options.peakWidth = 2;
-                options.spaceWidth = 1;
-                options.peakColorHex = '#6600FF';
+                // set the optioms
+                var layoutOptions = {};
+
+                layoutOptions.waveHeight = 100;
+                layoutOptions.peakWidth = 2;
+                layoutOptions.spaceWidth = 1;
+                layoutOptions.peakColorHex = '#6600FF';
+                
+                waveform.setLayoutOptions(layoutOptions);
 
                 // draw the waveform using the waveform module
-                waveform.draw(data, options);
+                waveform.draw();
                 
             } else {
                 
