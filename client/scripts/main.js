@@ -17,7 +17,8 @@ require.config({
         'ajax': 'library/ajax',
         'audio': 'library/audio',
         'canvas': 'library/canvas',
-        'analyzer': 'library/analyzer'
+        'analyzer': 'library/analyzer',
+        'event': 'library/event'
     }
     
 });
