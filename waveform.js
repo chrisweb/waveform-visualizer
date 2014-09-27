@@ -3,13 +3,15 @@
  * waveform
  * 
  * @param {type} $
- * @returns {waveform_L7.waveformAnonym$2}
+ * @param {type} EventsManager
+ * @returns {waveform_L8.waveform}
  */
 define([
-    'jquery'
+    'jquery',
+    'event'
     
 ], function (
-    $
+    $, EventsManager
 ) {
 
     'use strict';
@@ -51,6 +53,8 @@ define([
             }            
             
         }
+        
+        this.events = new EventsManager();
         
     };
     
@@ -204,13 +208,15 @@ define([
 
             if (!drawStop) {
                 
-                var range = Math.floor((Math.random() * 100) + 1);
+                this.events.once('player:progress', function(range) {
+
+                    // redraw wave with different color until song progress
+                    that.draw(range);
+
+                    drawRange.call(that);
+                    
+                });
                 
-                // redraw wave with different color until song progress
-                that.draw(range);
-            
-                drawRange.call(that);
-            
             }
             
         });
