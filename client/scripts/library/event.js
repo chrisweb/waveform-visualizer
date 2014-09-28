@@ -1,6 +1,8 @@
 /**
  * 
  * events manager
+ * simplified events manager based on backbone.events
+ * extends this to add your own events manager
  * 
  * @returns {unresolved}
  */
@@ -12,6 +14,8 @@ define([
 
     'use strict';
     
+    var events = {};
+    
     /**
      * 
      * events manager constructor
@@ -20,7 +24,7 @@ define([
      */
     var eventsManager = function eventsManagerFunction() {
         
-        this.events = {};
+        this.events = events;
         
     };
     
@@ -37,7 +41,7 @@ define([
         
         var eventsList;
         
-        if (!name in events) {
+        if (!(name in this.events)) {
         
             this.events[name] = [];
             
@@ -62,6 +66,48 @@ define([
     
     /**
      * 
+     * off
+     * 
+     * @param {type} name
+     * @returns {undefined}
+     */
+    eventsManager.prototype.off = function onFunction(name) {
+        
+        if (name in this.events) {
+            
+            delete this.events[name];
+            
+        }
+
+        return this;
+        
+    };
+    
+    /**
+     * 
+     * once
+     * 
+     * @param {type} name
+     * @param {type} callback
+     * @param {type} context
+     * @returns {undefined}
+     */
+    eventsManager.prototype.once = function onFunction(name, callback, context) {
+
+        var onceCallback = function() {
+            
+            callback.apply(this, arguments);
+            
+            this.off(name);
+            
+        };
+        
+        this.on(name, onceCallback, context);
+        
+    };
+    
+    /**
+     * 
      * trigger
      * 
      * @param {type} name
@@ -69,16 +115,16 @@ define([
      */
     eventsManager.prototype.trigger = function triggerFunction(name) {
         
-        var args = slice.call(arguments, 1);
+        var args = Array.prototype.slice.call(arguments, 1);
         
-        var events = this.events[name];
-        var eventsLength = events.length;
+        var eventsList = this.events[name];
+        var eventsListLength = eventsList.length;
         var i;
       
-        for (i = 0; i < eventsLength; i++) {
+        for (i = 0; i < eventsListLength; i++) {
         
-            var callback = events[i].callback;
-            var context = events[i].context;
+            var callback = eventsList[i].callback;
+            var context = eventsList[i].context;
         
             callback.apply(context, args);
             

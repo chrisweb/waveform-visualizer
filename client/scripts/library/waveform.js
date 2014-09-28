@@ -62,6 +62,7 @@ define([
      * 
      * draw the canvas wave form
      * 
+     * @param {type} range
      * @returns {undefined}
      */
     waveform.prototype.draw = function drawWaveFunction(range) {
@@ -83,18 +84,14 @@ define([
         
         var heightPercentage = waveLayoutOptions.waveHeight / 100;
         
+        console.log(range);
+        
         for (i = 0; i < peaksLength; i++) {
             
             var peakHeightInPercent = waveData[i];
             
             var peakHorizontalPosition = ((i + 1) * waveLayoutOptions.peakWidth) + (i * waveLayoutOptions.spaceWidth);
             var peakHeight = waveLayoutOptions.waveHeight - (heightPercentage * peakHeightInPercent);
-            
-            if (range !== undefined) {
-                
-                // TODO
-                
-            }
             
             // waveform top
             canvasContext.beginPath();
@@ -208,7 +205,7 @@ define([
 
             if (!drawStop) {
                 
-                this.events.once('player:progress', function(range) {
+                that.events.once('player:progress', function(range) {
 
                     // redraw wave with different color until song progress
                     that.draw(range);

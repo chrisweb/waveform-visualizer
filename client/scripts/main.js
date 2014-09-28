@@ -97,7 +97,7 @@ require([
         
         var audioContext = audio.getContext();
         
-        ajax.getAudioBuffer(trackId, trackFormat, audioContext, function(error, trackBuffer) {
+        ajax.getAudioBuffer(options, audioContext, function(error, trackBuffer) {
             
             // if there was no error on the server
             if (!error) {
