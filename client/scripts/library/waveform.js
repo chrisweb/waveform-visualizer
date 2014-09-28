@@ -75,7 +75,7 @@ define([
         $canvasElement.attr('height', canvasHeight);
         $canvasElement.attr('width', canvasWidth);
         
-        canvasContext.fillStyle = '#d9d9d9';
+        canvasContext.fillStyle = '#f8f8f8';
         canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         
         var i;
@@ -84,9 +84,32 @@ define([
         
         var heightPercentage = waveLayoutOptions.waveHeight / 100;
         
-        console.log(range);
+        var peaksRange = 0;
+        
+        if (range !== undefined) {
+        
+            var peaksPercentage = peaksLength / 100;
+        
+            peaksRange = Math.round(range * peaksPercentage);
+        
+        }
         
         for (i = 0; i < peaksLength; i++) {
+            
+            var topStrokeColor;
+            var bottomStrokeColor;
+            
+            if (i < peaksRange) {
+                
+                topStrokeColor = '#de00ff';
+                bottomStrokeColor = '#a97db3';
+                
+            } else {
+                
+                topStrokeColor = '#b57ec1';
+                bottomStrokeColor = '#c0a5c6';
+                
+            }
             
             var peakHeightInPercent = waveData[i];
             
@@ -97,14 +120,14 @@ define([
             canvasContext.beginPath();
             canvasContext.moveTo(peakHorizontalPosition, waveLayoutOptions.waveHeight);
             canvasContext.lineTo(peakHorizontalPosition, peakHeight);
-            canvasContext.strokeStyle = '#b57ec1';
+            canvasContext.strokeStyle = topStrokeColor;
             canvasContext.stroke();
             
             // waveform bottom
             canvasContext.beginPath();
             canvasContext.moveTo(peakHorizontalPosition, waveLayoutOptions.waveHeight);
             canvasContext.lineTo(peakHorizontalPosition, canvasHeight-peakHeight);
-            canvasContext.strokeStyle = '#c0a5c6';
+            canvasContext.strokeStyle = bottomStrokeColor;
             canvasContext.stroke();
             
         }

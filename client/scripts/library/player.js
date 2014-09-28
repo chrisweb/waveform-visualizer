@@ -62,9 +62,9 @@ define([
         currentTrackSource.connect(audioContext.destination);
         
         // the time right now (since the audiocontext got created)
-        track.currentTime = currentTrackSource.context.currentTime;
+        track.startTime = currentTrackSource.context.currentTime;
         
-        console.log('currentTime: ', track.currentTime);
+        console.log('startTime: ', track.startTime);
 
         currentTrackSource.start(0, track.playTimeOffset);
         
@@ -86,11 +86,7 @@ define([
         
         var pauseTime = currentTrackSource.context.currentTime;
         
-        console.log('pauseTime: ', pauseTime);
-        
-        track.playTimeOffset += pauseTime - track.currentTime;
-        
-        console.log('playTimeOffset: ', track.playTimeOffset);
+        track.playTimeOffset += pauseTime - track.startTime;
         
         stopTimer();
         
@@ -156,7 +152,7 @@ define([
         
         var triggerPositionEventBinded = triggerPositionEvent.bind(this);
         
-        intervalHandler = setInterval(triggerPositionEventBinded, 1000);
+        intervalHandler = setInterval(triggerPositionEventBinded, 200);
         
     };
     
@@ -179,10 +175,14 @@ define([
      * @returns {undefined}
      */
     var triggerPositionEvent = function triggerPositionEventFunction() {
+
+        var timeNow = currentTrackSource.context.currentTime;
         
-        var position = 0;
+        var playedTime = timeNow - track.startTime;
         
-        this.events.trigger('player:progress', position);
+        var playedTimePercentage = (playedTime / track.buffer.duration) * 100;
+        
+        this.events.trigger('player:progress', playedTimePercentage);
         
     };
 
