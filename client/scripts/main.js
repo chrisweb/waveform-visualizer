@@ -48,9 +48,12 @@ require([
     // on dom load
     $(function() {
 
-        var trackId = 1100511;
-        var peaksAmount = 400;
-        var trackFormat = 'ogg';
+        var options = {};
+
+        options.trackId = 1100511;
+        options.peaksAmount = 400;
+        options.trackFormat = 'ogg';
+        options.service = 'jamendo';
         
         // get the canvas element
         var $element = $('#serverWaveForm');
@@ -62,7 +65,7 @@ require([
         });
         
         // paint a waveform using server data
-        ajax.getWaveDataFromServer(trackId, trackFormat, peaksAmount, function(error, data) {
+        ajax.getWaveDataFromServer(options, function(error, data) {
             
             // if there was no error on the server
             if (!error) {

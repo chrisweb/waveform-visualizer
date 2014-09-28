@@ -51,16 +51,44 @@ define([
      * 
      * get the peaks data from server
      * 
-     * @param {type} trackId
-     * @param {type} trackFormat
-     * @param {type} peaksAmount
+     * @param {type} options
      * @param {type} callback
      * @returns {undefined}
      */
-    var getWaveDataFromServer = function getWaveDataFromServerFunction(trackId, trackFormat, peaksAmount, callback) {
+    var getWaveDataFromServer = function getWaveDataFromServerFunction(options, callback) {
+        
+        if (options === undefined) {
+            
+            callback('options is undefined');
+            
+        }
+        
+        if (options.trackId === undefined) {
+            
+            callback('trackId is undefined');
+            
+        }
+        
+        if (options.trackFormat === undefined) {
+            
+            callback('trackFormat is undefined');
+            
+        }
+        
+        if (options.peaksAmount === undefined) {
+            
+            callback('peaksAmount is undefined');
+            
+        }
+        
+        if (options.service === undefined) {
+            
+            callback('service is undefined');
+            
+        }
         
         var request = $.ajax({
-            url: '/getwavedata?trackId=' + trackId + '&trackFormat=' + trackFormat + '&peaksAmount=' + peaksAmount,
+            url: '/getwavedata?trackId=' + options.trackId + '&trackFormat=' + options.trackFormat + '&peaksAmount=' + options.peaksAmount + '&service=' + options.service,
             type: 'GET',
             dataType: 'json'
         });
