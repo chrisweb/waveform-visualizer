@@ -18,16 +18,16 @@ define([
      * 
      * getAudioBuffer
      * 
-     * @param {type} trackId
-     * @param {type} trackFormat
+     * @param {type} options
+     * @param {type} audioContext
      * @param {type} callback
      * @returns {undefined}
      */
-    var getAudioBuffer = function (trackId, trackFormat, audioContext, callback) {
+    var getAudioBuffer = function (options, audioContext, callback) {
         
         var xhr = new XMLHttpRequest();
         
-        xhr.open('GET', '/getTrack?trackId=' + trackId + '&trackFormat=' + trackFormat, true);
+        xhr.open('GET', '/getTrack?trackId=' + options.trackId + '&trackFormat=' + options.trackFormat, true);
         xhr.responseType = 'arraybuffer';
         xhr.send();
         

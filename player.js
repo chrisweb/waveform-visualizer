@@ -2,12 +2,14 @@
  * 
  * player
  * 
- * @returns {player_L6.playerAnonym$1}
+ * @param {type} EventsManager
+ * @returns {player_L7.player}
  */
 define([
-
+    'event'
+    
 ], function (
-
+    EventsManager
 ) {
 
     'use strict';
@@ -41,6 +43,8 @@ define([
             
         }
         
+        this.events = new EventsManager();
+        
     };
     
     /**
@@ -64,6 +68,8 @@ define([
 
         currentTrackSource.start(0, track.playTimeOffset);
         
+        startTimer.call(this);
+        
     };
     
     /**
@@ -86,6 +92,8 @@ define([
         
         console.log('playTimeOffset: ', track.playTimeOffset);
         
+        stopTimer();
+        
     };
     
     /**
@@ -99,6 +107,8 @@ define([
     player.prototype.stop = function stopFunction(trackId, trackFormat) {
         
         currentTrackSource.stop(0);
+        
+        stopTimer();
         
     };
     
@@ -131,6 +141,48 @@ define([
         };
         
         track.buffer = buffer;
+        
+    };
+    
+    var intervalHandler;
+    
+    /**
+     * 
+     * start timer
+     * 
+     * @returns {undefined}
+     */
+    var startTimer = function startTimerFunction() {
+        
+        var triggerPositionEventBinded = triggerPositionEvent.bind(this);
+        
+        intervalHandler = setInterval(triggerPositionEventBinded, 1000);
+        
+    };
+    
+    /**
+     * 
+     * stop timer
+     * 
+     * @returns {undefined}
+     */
+    var stopTimer = function stopTimerFunction() {
+        
+        clearInterval(intervalHandler);
+        
+    };
+    
+    /**
+     * 
+     * trigger position event
+     * 
+     * @returns {undefined}
+     */
+    var triggerPositionEvent = function triggerPositionEventFunction() {
+        
+        var position = 0;
+        
+        this.events.trigger('player:progress', position);
         
     };
 
