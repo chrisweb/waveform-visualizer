@@ -11,9 +11,7 @@ define([
 ) {
 
     'use strict';
-    
-    var audioContext;
-    
+
     /**
      * 
      * player constructor
@@ -21,7 +19,9 @@ define([
      * @param {type} options
      * @returns {player_L9.player}
      */
-    var analyser = function analyserConstructor(options) {
+    var analyzer = function analyzerConstructor(options) {
+        
+        this.audioContext;
         
         if (options !== undefined) {
             
@@ -35,6 +35,12 @@ define([
         
     };
     
+    analyzer.setAudioContext = function setAudioContextFunction() {
+        
+        
+        
+    };
+    
     /**
      * 
      * analyze the track using the client web audio api
@@ -42,9 +48,9 @@ define([
      * @param {type} trackBuffer
      * @returns {undefined}
      */
-    analyser.analyzeTrack = function analyzeTrackFunction(trackBuffer) {
+    analyzer.analyzeTrack = function analyzeTrackFunction(trackBuffer) {
         
-        var audioAnalyser = audioContext.createAnalyser();
+        var audioAnalyzer = this.audioContext.createAnalyzer();
         
         
         
@@ -54,7 +60,7 @@ define([
      * public functions
      */
     return {
-        analyser: analyser
+        analyzer: analyzer
     };
 
 });

@@ -13,9 +13,7 @@ define([
 ) {
 
     'use strict';
-    
-    var audioContext;
-    
+
     /**
      * 
      * get the web audio api audiocontext
@@ -26,7 +24,7 @@ define([
         
         var AudioContext = window.AudioContext || window.webkitAudioContext;
         
-        audioContext = new AudioContext();
+        var audioContext = new AudioContext();
         
         return audioContext;
         
