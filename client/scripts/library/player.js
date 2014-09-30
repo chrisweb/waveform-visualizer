@@ -178,11 +178,11 @@ define([
 
         var timeNow = currentTrackSource.context.currentTime;
         
-        var playedTime = timeNow - track.startTime;
+        track.playTime = (timeNow - track.startTime) + track.playTimeOffset;
         
-        var playedTimePercentage = (playedTime / track.buffer.duration) * 100;
+        track.playedTimePercentage = (track.playTime / track.buffer.duration) * 100;
         
-        this.events.trigger('player:progress', playedTimePercentage);
+        this.events.trigger('player:progress', track.playedTimePercentage);
         
     };
 
