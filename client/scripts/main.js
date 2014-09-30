@@ -48,6 +48,7 @@ require([
     // on dom load
     $(function() {
 
+        // WAVEFORM 1
         var options = {};
 
         options.trackId = 1100511;
@@ -55,20 +56,20 @@ require([
         options.trackFormat = 'ogg';
         options.service = 'jamendo';
         
-        // get the canvas element
-        var $element = $('#serverWaveForm');
-                
-        var canvasContext = canvas.getContext($element);
-                
-        var waveform = new Waveform({
-            canvasContext: canvasContext
-        });
-        
         // paint a waveform using server data
         ajax.getWaveDataFromServer(options, function(error, data) {
             
             // if there was no error on the server
             if (!error) {
+                
+                // get the canvas element
+                var $element = $('#serverWaveForm_1');
+
+                var canvasContext = canvas.getContext($element);
+
+                var waveform = new Waveform({
+                    canvasContext: canvasContext
+                });
 
                 // set waveform data
                 waveform.setWaveData(data);
@@ -86,6 +87,13 @@ require([
                 // draw the waveform using the waveform module
                 waveform.draw();
                 
+                var trackOptions = {};
+
+                trackOptions.trackId = 1100511;
+                trackOptions.trackFormat = 'ogg';
+                
+                addPlayer(waveform, trackOptions);
+                
             } else {
                 
                 // log the server error
@@ -95,6 +103,66 @@ require([
             
         });
         
+        // WAVEFORM 2
+        var options = {};
+
+        options.trackId = 1100511;
+        options.peaksAmount = 400;
+        options.trackFormat = 'mp3';
+        options.service = 'jamendo';
+        
+        // paint a waveform using server data
+        ajax.getWaveDataFromServer(options, function(error, data) {
+            
+            // if there was no error on the server
+            if (!error) {
+
+                // get the canvas element
+                var $element = $('#serverWaveForm_2');
+
+                var canvasContext = canvas.getContext($element);
+
+                var waveform = new Waveform({
+                    canvasContext: canvasContext
+                });
+
+                // set waveform data
+                waveform.setWaveData(data);
+
+                // set the optioms
+                var layoutOptions = {};
+
+                layoutOptions.waveHeight = 100;
+                layoutOptions.peakWidth = 2;
+                layoutOptions.spaceWidth = 1;
+                layoutOptions.peakColorHex = '#6600FF';
+                
+                waveform.setLayoutOptions(layoutOptions);
+
+                // draw the waveform using the waveform module
+                waveform.draw();
+                
+                var trackOptions = {};
+
+                trackOptions.trackId = 1100511;
+                trackOptions.trackFormat = 'mp3';
+                
+                addPlayer(waveform, options);
+                
+            } else {
+                
+                // log the server error
+                console.log(error);
+                
+            }
+            
+        });
+        
+    });
+    
+    var addPlayer = function addPlayer(waveform, options) {
+        
+        // AUDIO 2
         var audioContext = audio.getContext();
         
         ajax.getAudioBuffer(options, audioContext, function(error, trackBuffer) {
@@ -119,7 +187,7 @@ require([
                 
                 $body.find('.player').append($button);
                 
-                $body.on('click', 'button', function() {
+                $button.on('click', function() {
                     
                     if ($(this).hasClass('play')) {
                     
@@ -150,6 +218,6 @@ require([
             
         });
         
-    });
+    };
     
 });

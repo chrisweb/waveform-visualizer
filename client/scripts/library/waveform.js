@@ -15,12 +15,7 @@ define([
 ) {
 
     'use strict';
-    
-    var canvasContext;
-    var $canvasElement;
-    var waveData;
-    var waveLayoutOptions;
-    
+
     /**
      * 
      * waveform constructor
@@ -30,13 +25,16 @@ define([
      */
     var waveform = function waveformConstructor(options) {
         
+        this.canvasContext;
+        this.$canvasElement;
+        this.waveData;
+        this.waveLayoutOptions;
+        
         if (options !== undefined) {
             
             if (options.canvasContext !== undefined) {
                 
                 this.setCanvasContext(options.canvasContext);
-                
-                //console.log(canvasContext);
                 
             }
             
@@ -67,22 +65,22 @@ define([
      */
     waveform.prototype.draw = function drawWaveFunction(range) {
 
-        var peaksLength = waveData.length;
-        var canvasHeight = waveLayoutOptions.waveHeight * 2;
-        var canvasWidth = (peaksLength * waveLayoutOptions.peakWidth) + ((peaksLength - 1) * waveLayoutOptions.spaceWidth);
-        var peakColor = waveLayoutOptions.peakColorHex;
+        var peaksLength = this.waveData.length;
+        var canvasHeight = this.waveLayoutOptions.waveHeight * 2;
+        var canvasWidth = (peaksLength * this.waveLayoutOptions.peakWidth) + ((peaksLength - 1) * this.waveLayoutOptions.spaceWidth);
+        var peakColor = this.waveLayoutOptions.peakColorHex;
         
-        $canvasElement.attr('height', canvasHeight);
-        $canvasElement.attr('width', canvasWidth);
+        this.$canvasElement.attr('height', canvasHeight);
+        this.$canvasElement.attr('width', canvasWidth);
         
-        canvasContext.fillStyle = '#f8f8f8';
-        canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
+        this.canvasContext.fillStyle = '#f8f8f8';
+        this.canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         
         var i;
         
-        canvasContext.lineWidth = waveLayoutOptions.peakWidth;
+        this.canvasContext.lineWidth = this.waveLayoutOptions.peakWidth;
         
-        var heightPercentage = waveLayoutOptions.waveHeight / 100;
+        var heightPercentage = this.waveLayoutOptions.waveHeight / 100;
         
         var peaksRange = 0;
         
@@ -111,28 +109,28 @@ define([
                 
             }
             
-            var peakHeightInPercent = waveData[i];
+            var peakHeightInPercent = this.waveData[i];
             
-            var peakHorizontalPosition = ((i + 1) * waveLayoutOptions.peakWidth) + (i * waveLayoutOptions.spaceWidth);
-            var peakHeight = waveLayoutOptions.waveHeight - (heightPercentage * peakHeightInPercent);
+            var peakHorizontalPosition = ((i + 1) * this.waveLayoutOptions.peakWidth) + (i * this.waveLayoutOptions.spaceWidth);
+            var peakHeight = this.waveLayoutOptions.waveHeight - (heightPercentage * peakHeightInPercent);
             
             // waveform top
-            canvasContext.beginPath();
-            canvasContext.moveTo(peakHorizontalPosition, waveLayoutOptions.waveHeight);
-            canvasContext.lineTo(peakHorizontalPosition, peakHeight);
-            canvasContext.strokeStyle = topStrokeColor;
-            canvasContext.stroke();
+            this.canvasContext.beginPath();
+            this.canvasContext.moveTo(peakHorizontalPosition, this.waveLayoutOptions.waveHeight);
+            this.canvasContext.lineTo(peakHorizontalPosition, peakHeight);
+            this.canvasContext.strokeStyle = topStrokeColor;
+            this.canvasContext.stroke();
             
             // waveform bottom
-            canvasContext.beginPath();
-            canvasContext.moveTo(peakHorizontalPosition, waveLayoutOptions.waveHeight);
-            canvasContext.lineTo(peakHorizontalPosition, canvasHeight-peakHeight);
-            canvasContext.strokeStyle = bottomStrokeColor;
-            canvasContext.stroke();
+            this.canvasContext.beginPath();
+            this.canvasContext.moveTo(peakHorizontalPosition, this.waveLayoutOptions.waveHeight);
+            this.canvasContext.lineTo(peakHorizontalPosition, canvasHeight-peakHeight);
+            this.canvasContext.strokeStyle = bottomStrokeColor;
+            this.canvasContext.stroke();
             
         }
         
-        addClickListener();
+        addClickListener.call(this);
 
     };
     
@@ -144,9 +142,9 @@ define([
      */
     var addClickListener = function addClickListenerFunction() {
         
-        $canvasElement.on('click', function(event) {
+        this.$canvasElement.on('click', function(event) {
             
-            getMousePosition($canvasElement, event);
+            getMousePosition(this.$canvasElement, event);
             
         });
         
@@ -179,9 +177,9 @@ define([
      */
     waveform.prototype.setCanvasContext = function setCanvasContextFunction(context) {
         
-        canvasContext = context;
+        this.canvasContext = context;
         
-        $canvasElement = $(canvasContext.canvas);
+        this.$canvasElement = $(this.canvasContext.canvas);
         
     };
     
@@ -194,7 +192,7 @@ define([
      */
     waveform.prototype.setWaveData = function setWaveDataFunction(data) {
         
-        waveData = data;
+        this.waveData = data;
         
     };
 
@@ -207,7 +205,7 @@ define([
      */
     waveform.prototype.setLayoutOptions = function setLayoutOptionsFunction(layoutOptions) {
         
-        waveLayoutOptions = layoutOptions;
+        this.waveLayoutOptions = layoutOptions;
         
     };
 

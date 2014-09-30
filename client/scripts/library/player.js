@@ -14,10 +14,6 @@ define([
 
     'use strict';
     
-    var audioContext;
-    var currentTrackSource;
-    var track;
-    
     /**
      * 
      * player constructor
@@ -26,6 +22,10 @@ define([
      * @returns {player_L9.player}
      */
     var player = function playerConstructor(options) {
+        
+        this.audioContext;
+        this.currentTrackSource;
+        this.track;
         
         if (options !== undefined) {
             
@@ -55,18 +55,18 @@ define([
      */
     player.prototype.play = function playFunction() {
         
-        currentTrackSource = audioContext.createBufferSource();
+        this.currentTrackSource = this.audioContext.createBufferSource();
 
-        currentTrackSource.buffer = track.buffer;
+        this.currentTrackSource.buffer = this.track.buffer;
 
-        currentTrackSource.connect(audioContext.destination);
+        this.currentTrackSource.connect(this.audioContext.destination);
         
-        // the time right now (since the audiocontext got created)
-        track.startTime = currentTrackSource.context.currentTime;
+        // the time right now (since the this.audiocontext got created)
+        this.track.startTime = this.currentTrackSource.context.currentTime;
         
-        console.log('startTime: ', track.startTime);
+        console.log('startTime: ', this.track.startTime);
 
-        currentTrackSource.start(0, track.playTimeOffset);
+        this.currentTrackSource.start(0, this.track.playTimeOffset);
         
         startTimer.call(this);
         
@@ -82,11 +82,11 @@ define([
      */
     player.prototype.pause = function pauseFunction(trackId, trackFormat) {
         
-        currentTrackSource.stop();
+        this.currentTrackSource.stop();
         
-        var pauseTime = currentTrackSource.context.currentTime;
+        var pauseTime = this.currentTrackSource.context.currentTime;
         
-        track.playTimeOffset += pauseTime - track.startTime;
+        this.track.playTimeOffset += pauseTime - this.track.startTime;
         
         stopTimer();
         
@@ -102,7 +102,7 @@ define([
      */
     player.prototype.stop = function stopFunction(trackId, trackFormat) {
         
-        currentTrackSource.stop(0);
+        this.currentTrackSource.stop(0);
         
         stopTimer();
         
@@ -117,7 +117,7 @@ define([
      */
     player.prototype.setAudioContext = function setAudioContextFunction(context) {
         
-        audioContext = context;
+        this.audioContext = context;
         
     };
     
@@ -131,12 +131,12 @@ define([
     player.prototype.setBuffer = function setBufferFunction(buffer) {
         
         // create a new track object
-        track = {
+        this.track = {
             playTimeOffset: 0,
             currentTime: 0
         };
         
-        track.buffer = buffer;
+        this.track.buffer = buffer;
         
     };
     
@@ -176,13 +176,13 @@ define([
      */
     var triggerPositionEvent = function triggerPositionEventFunction() {
 
-        var timeNow = currentTrackSource.context.currentTime;
+        var timeNow = this.currentTrackSource.context.currentTime;
         
-        track.playTime = (timeNow - track.startTime) + track.playTimeOffset;
+        this.track.playTime = (timeNow - this.track.startTime) + this.track.playTimeOffset;
         
-        track.playedTimePercentage = (track.playTime / track.buffer.duration) * 100;
+        this.track.playedTimePercentage = (this.track.playTime / this.track.buffer.duration) * 100;
         
-        this.events.trigger('player:progress', track.playedTimePercentage);
+        this.events.trigger('player:progress', this.track.playedTimePercentage);
         
     };
 

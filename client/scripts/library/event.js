@@ -98,7 +98,7 @@ define([
      */
     eventsManager.prototype.once = function onFunction(name, callback, context) {
 
-        console.log('once');
+        //console.log('once');
         
         var that = this;
 
@@ -125,18 +125,22 @@ define([
         
         var args = Array.prototype.slice.call(arguments, 1);
         
-        var eventsList = this.events[name];
+        if (name in this.events) {
         
-        var eventsListLength = eventsList.length;
-        var i;
+            var eventsList = this.events[name];
+
+            var eventsListLength = eventsList.length;
+            var i;
+
+            for (i = 0; i < eventsListLength; i++) {
+
+                var callback = eventsList[i].callback;
+                var context = eventsList[i].context;
+
+                callback.apply(context, args);
+
+            }
         
-        for (i = 0; i < eventsListLength; i++) {
-            
-            var callback = eventsList[i].callback;
-            var context = eventsList[i].context;
-            
-            callback.apply(context, args);
-            
         }
         
         return this;

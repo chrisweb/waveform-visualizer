@@ -14,8 +14,6 @@ define([
 
     'use strict';
     
-    var canvasContext;
-    
     /**
      * 
      * get the canvas context from canvas element
