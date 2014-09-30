@@ -24,7 +24,7 @@ process.argv.forEach(function (value, index, array) {
     
     if (index === 3) {
         
-        queryObject.trackId = parseInt(value);
+        queryObject.trackId = value;
         
     }
     
