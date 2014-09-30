@@ -270,7 +270,10 @@ define([
             
             clearInterval(frameHandle);
             
+            
         }
+        
+        this.events.off('player:progress');
         
     };
 

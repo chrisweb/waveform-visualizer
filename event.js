@@ -22,7 +22,9 @@ define([
      * 
      * @returns {event_L9.eventsManager}
      */
-    var eventsManager = function eventsManagerFunction() {
+    var eventsManager = function eventsManagerConstructor() {
+        
+        //this.events = events;
         
         this.events = events;
         
@@ -39,7 +41,7 @@ define([
      */
     eventsManager.prototype.on = function onFunction(name, callback, context) {
         
-        var eventsList;
+        var eventsContainer;
         
         if (!(name in this.events)) {
         
@@ -47,7 +49,7 @@ define([
             
         }
         
-        eventsList = this.events[name];
+        eventsContainer = this.events[name];
         
         if (context === undefined) {
             
@@ -55,7 +57,7 @@ define([
             
         }
         
-        eventsList.push({
+        eventsContainer.push({
             callback: callback,
             context: context
         });
@@ -74,6 +76,8 @@ define([
     eventsManager.prototype.off = function onFunction(name) {
         
         if (name in this.events) {
+            
+            //this.events[name] = [];
             
             delete this.events[name];
             
@@ -94,11 +98,15 @@ define([
      */
     eventsManager.prototype.once = function onFunction(name, callback, context) {
 
+        console.log('once');
+        
+        var that = this;
+
         var onceCallback = function() {
             
             callback.apply(this, arguments);
             
-            this.off(name);
+            that.off(name);
             
         };
         
@@ -118,14 +126,15 @@ define([
         var args = Array.prototype.slice.call(arguments, 1);
         
         var eventsList = this.events[name];
+        
         var eventsListLength = eventsList.length;
         var i;
-      
-        for (i = 0; i < eventsListLength; i++) {
         
+        for (i = 0; i < eventsListLength; i++) {
+            
             var callback = eventsList[i].callback;
             var context = eventsList[i].context;
-        
+            
             callback.apply(context, args);
             
         }
