@@ -6,9 +6,9 @@ process.argv.forEach(function (value, index, array) {
     
     var commandParametersLength = array.length - 2;
     
-    if (commandParametersLength < 5 || commandParametersLength > 6) {
+    if (commandParametersLength !== 7) {
         
-        var error = 'invalid parameters length, please call the cli with the following parameters: node cli SERVER_PATH TRACK_NAME TRACK_EXTENSION AMOUT_OF_PEAKS LOCAL_OR_REMOTE OPTIONAL_OUTPUT_FORMAT\n';
+        var error = 'invalid parameters length, please call the cli with the following parameters: node cli SERVER_PATH TRACK_NAME TRACK_EXTENSION AMOUT_OF_PEAKS LOCAL_OR_REMOTE_SERVICENAME PEAKSLIST_OUTPUT_FORMAT TRACK_FORMAT_DETECTION\n';
         
         process.stderr.write(error + "\n");
 
@@ -52,6 +52,30 @@ process.argv.forEach(function (value, index, array) {
         
     }
     
+    if (index === 8) {
+        
+        if (typeof value === 'boolean') {
+        
+            queryObject.detectFormat = value;
+            
+        } else {
+            
+            var detectFormat = value.toLowerCase();
+            
+            if (detectFormat === 'true') {
+                
+                queryObject.detectFormat = true;
+                
+            } else {
+                
+                queryObject.detectFormat = false;
+                
+            }
+            
+        }
+        
+    }
+    
 });
 
 var outputResponse = function outputResponseFunction(error, peaks) {
@@ -66,6 +90,7 @@ var outputResponse = function outputResponseFunction(error, peaks) {
 
         var output = '';
 
+        // outputFormat can be json or text
         if (queryObject.outputFormat === 'json') {
 
             var outputData = {
@@ -100,14 +125,14 @@ var outputResponse = function outputResponseFunction(error, peaks) {
 
 if (queryObject.service === 'local') {
     
-    // node cli ./downloads 1100511 ogg 200 local
-    // node cli ./downloads 1100511 mp3 200 local
+    // node cli ./downloads 1100511 ogg 200 local json false
+    // node cli ./downloads 1100511 mp3 200 local json false
     waveformData.getLocalWaveData(queryObject, outputResponse);
     
 } else {
     
-    // node cli ./downloads 1100511 ogg 200 jamendo
-    // node cli ./downloads 1100511 mp3 200 jamendo
+    // node cli ./downloads 1100511 ogg 200 jamendo json false
+    // node cli ./downloads 1100511 mp3 200 jamendo json false
     waveformData.getRemoteWaveData(queryObject, outputResponse);
     
 }
