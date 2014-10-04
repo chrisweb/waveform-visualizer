@@ -100,12 +100,12 @@ var outputResponse = function outputResponseFunction(error, peaks) {
 
 if (queryObject.service === 'local') {
     
-    // node cli /downloaded_tracks 1100511 ogg 200 local
+    // node cli ./downloads 1100511 ogg 200 local
     waveformData.getLocalWaveData(queryObject, outputResponse);
     
 } else {
     
-    // node cli /downloaded_tracks 1100511 ogg 200 jamendo
+    // node cli ./downloads 1100511 ogg 200 jamendo
     waveformData.getRemoteWaveData(queryObject, outputResponse);
     
 }
