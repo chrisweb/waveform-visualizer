@@ -26,6 +26,7 @@ define([
         this.audioContext;
         this.currentTrackSource;
         this.track;
+        this.intervalHandler;
         
         if (options !== undefined) {
             
@@ -70,6 +71,8 @@ define([
         
         startTimer.call(this);
         
+        startListeningForPositionChange.call(this);
+        
     };
     
     /**
@@ -88,7 +91,9 @@ define([
         
         this.track.playTimeOffset += pauseTime - this.track.startTime;
         
-        stopTimer();
+        stopTimer.call(this);
+        
+        stopListeningForPositionChange.call(this);
         
     };
     
@@ -104,7 +109,9 @@ define([
         
         this.currentTrackSource.stop(0);
         
-        stopTimer();
+        stopTimer.call(this);
+        
+        stopListeningForPositionChange.call(this);
         
     };
     
@@ -140,8 +147,6 @@ define([
         
     };
     
-    var intervalHandler;
-    
     /**
      * 
      * start timer
@@ -150,9 +155,9 @@ define([
      */
     var startTimer = function startTimerFunction() {
         
-        var triggerPositionEventBinded = triggerPositionEvent.bind(this);
+        var triggerProgressEventBinded = triggerProgressEvent.bind(this);
         
-        intervalHandler = setInterval(triggerPositionEventBinded, 200);
+        this.intervalHandler = setInterval(triggerProgressEventBinded, 200);
         
     };
     
@@ -164,17 +169,17 @@ define([
      */
     var stopTimer = function stopTimerFunction() {
         
-        clearInterval(intervalHandler);
+        clearInterval(this.intervalHandler);
         
     };
     
     /**
      * 
-     * trigger position event
+     * trigger progress event
      * 
      * @returns {undefined}
      */
-    var triggerPositionEvent = function triggerPositionEventFunction() {
+    var triggerProgressEvent = function triggerProgressEventFunction() {
 
         var timeNow = this.currentTrackSource.context.currentTime;
         
@@ -183,6 +188,34 @@ define([
         this.track.playedTimePercentage = (this.track.playTime / this.track.buffer.duration) * 100;
         
         this.events.trigger('player:progress', this.track.playedTimePercentage);
+        
+    };
+    
+    /**
+     * 
+     * start listening for a position change request
+     * 
+     * @returns {undefined}
+     */
+    var startListeningForPositionChange = function startListeningForPositionChangeFunction() {
+        
+        this.events.on('waveform:position', function(trackPositionInPercent) {
+            
+            console.log(trackPositionInPercent);
+            
+        });
+        
+    };
+    
+    /**
+     * 
+     * stop listening for position change requests
+     * 
+     * @returns {undefined}
+     */
+    var stopListeningForPositionChange = function stopListeningForPositionChangeFunction() {
+        
+        this.events.off('waveform:position');
         
     };
 

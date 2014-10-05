@@ -29,6 +29,7 @@ define([
         this.$canvasElement;
         this.waveData;
         this.waveLayoutOptions;
+        this.firstDrawing = true;
         
         if (options !== undefined) {
             
@@ -65,22 +66,34 @@ define([
      */
     waveform.prototype.draw = function drawWaveFunction(range) {
 
+        var waveLayoutOptions = setDefaultLayoutOptionsIfNotSet(this.waveLayoutOptions);
+
         var peaksLength = this.waveData.length;
-        var canvasHeight = this.waveLayoutOptions.waveHeight * 2;
-        var canvasWidth = (peaksLength * this.waveLayoutOptions.peakWidth) + ((peaksLength - 1) * this.waveLayoutOptions.spaceWidth);
-        var peakColor = this.waveLayoutOptions.peakColorHex;
+        var canvasHeight = waveLayoutOptions.waveHeightInPixel;
         
+        // the canvas width is the width of all the peaks, plus the width of
+        // all the spaces, the amount of spaces is equal to the amount of peaks
+        // minus one
+        var canvasWidth = (peaksLength * waveLayoutOptions.peakWidthInPixel) + ((peaksLength - 1) * waveLayoutOptions.spaceWidthInPixel);
+        
+        // canvas dimensions
         this.$canvasElement.attr('height', canvasHeight);
         this.$canvasElement.attr('width', canvasWidth);
         
-        this.canvasContext.fillStyle = '#f8f8f8';
+        // canvas background color
+        this.canvasContext.fillStyle = '#' + waveLayoutOptions.waveBackgroundColorHex;
         this.canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         
         var i;
         
-        this.canvasContext.lineWidth = this.waveLayoutOptions.peakWidth;
+        // each peak is the line and the line width is the peak width
+        this.canvasContext.lineWidth = waveLayoutOptions.peakWidthInPixel;
         
-        var heightPercentage = this.waveLayoutOptions.waveHeight / 100;
+        // the max height of the top peaks
+        var topPeakMaxHeightInPixel = waveLayoutOptions.waveHeightInPixel * (waveLayoutOptions.waveTopPercentage / 100);
+        
+        // the max height of the bottom peaks
+        var bottomPeakMaxHeightInPixel = waveLayoutOptions.waveHeightInPixel  * ((100 - waveLayoutOptions.waveTopPercentage) / 100);
         
         var peaksRange = 0;
         
@@ -99,32 +112,32 @@ define([
             
             if (i < peaksRange) {
                 
-                topStrokeColor = '#de00ff';
-                bottomStrokeColor = '#a97db3';
+                topStrokeColor = '#' + waveLayoutOptions.peakTopProgressColorHex;
+                bottomStrokeColor = '#' + waveLayoutOptions.peakBottomProgressColorHex;
                 
             } else {
                 
-                topStrokeColor = '#b57ec1';
-                bottomStrokeColor = '#c0a5c6';
+                topStrokeColor = '#' + waveLayoutOptions.peakTopColorHex;
+                bottomStrokeColor = '#' + waveLayoutOptions.peakBottomColorHex;
                 
             }
             
             var peakHeightInPercent = this.waveData[i];
             
-            var peakHorizontalPosition = ((i + 1) * this.waveLayoutOptions.peakWidth) + (i * this.waveLayoutOptions.spaceWidth);
-            var peakHeight = this.waveLayoutOptions.waveHeight - (heightPercentage * peakHeightInPercent);
+            // the horizontal position of a peak
+            var peakHorizontalPosition = ((i + 1) * waveLayoutOptions.peakWidthInPixel) + (i * waveLayoutOptions.spaceWidthInPixel);
             
             // waveform top
             this.canvasContext.beginPath();
-            this.canvasContext.moveTo(peakHorizontalPosition, this.waveLayoutOptions.waveHeight);
-            this.canvasContext.lineTo(peakHorizontalPosition, peakHeight);
+            this.canvasContext.moveTo(peakHorizontalPosition, topPeakMaxHeightInPixel);
+            this.canvasContext.lineTo(peakHorizontalPosition, topPeakMaxHeightInPixel - (topPeakMaxHeightInPixel * (peakHeightInPercent / 100)));
             this.canvasContext.strokeStyle = topStrokeColor;
             this.canvasContext.stroke();
             
             // waveform bottom
             this.canvasContext.beginPath();
-            this.canvasContext.moveTo(peakHorizontalPosition, this.waveLayoutOptions.waveHeight);
-            this.canvasContext.lineTo(peakHorizontalPosition, canvasHeight-peakHeight);
+            this.canvasContext.moveTo(peakHorizontalPosition, topPeakMaxHeightInPixel);
+            this.canvasContext.lineTo(peakHorizontalPosition, topPeakMaxHeightInPixel + (bottomPeakMaxHeightInPixel * (peakHeightInPercent / 100)));
             this.canvasContext.strokeStyle = bottomStrokeColor;
             this.canvasContext.stroke();
             
@@ -136,15 +149,100 @@ define([
     
     /**
      * 
+     * set default layout options if not yet set by user
+     * 
+     * @param {type} userWaveLayoutOptions
+     * @returns {unresolved}
+     */
+    var setDefaultLayoutOptionsIfNotSet = function setDefaultLayoutOptionsIfNotSetFunction(userWaveLayoutOptions) {
+        
+        if (userWaveLayoutOptions === undefined) {
+            
+            userWaveLayoutOptions = {};
+            
+        }
+        
+        if (userWaveLayoutOptions.waveHeightInPixel === undefined) {
+            
+            userWaveLayoutOptions.waveHeightInPixel = 100;
+            
+        }
+        
+        if (userWaveLayoutOptions.waveBackgroundColorHex === undefined) {
+            
+            userWaveLayoutOptions.waveBackgroundColorHex = 'fff';
+            
+        }
+        
+        if (userWaveLayoutOptions.peakWidthInPixel === undefined) {
+            
+            userWaveLayoutOptions.peakWidthInPixel = 2;
+            
+        }
+        
+        if (userWaveLayoutOptions.spaceWidthInPixel === undefined) {
+            
+            userWaveLayoutOptions.spaceWidthInPixel = 0;
+            
+        }
+        
+        if (userWaveLayoutOptions.waveTopPercentage === undefined) {
+            
+            userWaveLayoutOptions.waveTopPercentage = 50;
+            
+        }
+        
+        if (userWaveLayoutOptions.peakTopColorHex === undefined) {
+            
+            userWaveLayoutOptions.peakTopColorHex = '4183D7';
+            
+        }
+        
+        if (userWaveLayoutOptions.peakBottomColorHex === undefined) {
+            
+            userWaveLayoutOptions.peakBottomColorHex = '4B77BE';
+            
+        }
+        
+        if (userWaveLayoutOptions.peakTopProgressColorHex === undefined) {
+            
+            userWaveLayoutOptions.peakTopProgressColorHex = '19B5FE';
+            
+        }
+        
+        if (userWaveLayoutOptions.peakBottomProgressColorHex === undefined) {
+            
+            userWaveLayoutOptions.peakBottomProgressColorHex = '3498DB';
+            
+        }
+        
+        return userWaveLayoutOptions;
+        
+    };
+    
+    /**
+     * 
      * add a click listener to the canvas waveform
      * 
      * @returns {undefined}
      */
     var addClickListener = function addClickListenerFunction() {
         
+        var that = this;
+        
         this.$canvasElement.on('click', function(event) {
             
-            getMousePosition(this.$canvasElement, event);
+            event.preventDefault();
+            
+            var canvasPositionInPixel = getMousePosition(this, event);
+            
+            var pixelsPerPercent = that.$canvasElement.context.width / 100;
+            
+            var trackPositionInPercent = canvasPositionInPixel / pixelsPerPercent;
+            
+            //console.log(trackPositionInPercent);
+            
+            that.events.trigger('waveform:position', trackPositionInPercent);
             
         });
         
@@ -154,17 +252,19 @@ define([
      * 
      * get the mouse position of the click on the canvas
      * 
-     * @param {type} $element
+     * @param {type} element
      * @param {type} event
      * @returns {undefined}
      */
-    var getMousePosition = function getMousePositionFunction($element, event) {
+    var getMousePosition = function getMousePositionFunction(element, event) {
         
-        var boundingClientRectangle = $element[0].getBoundingClientRect();
+        var boundingClientRectangle = element.getBoundingClientRect();
         
         var position = event.clientX - boundingClientRectangle.left;
         
-        console.log(position);
+        //console.log(position);
+        
+        return position;
         
     };
     

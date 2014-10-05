@@ -53,7 +53,7 @@ define([
         
         if (context === undefined) {
             
-            context = this;
+            context = null;
             
         }
         
@@ -104,13 +104,13 @@ define([
 
         var onceCallback = function() {
             
-            callback.apply(this, arguments);
-            
             that.off(name);
+            
+            callback.apply(this, arguments);
             
         };
         
-        this.on(name, onceCallback, context);
+        return this.on(name, onceCallback, context);
         
     };
     
