@@ -77,10 +77,15 @@ require([
                 // set the optioms
                 var layoutOptions = {};
 
-                layoutOptions.waveHeight = 100;
-                layoutOptions.peakWidth = 2;
-                layoutOptions.spaceWidth = 1;
-                layoutOptions.peakColorHex = '#6600FF';
+                layoutOptions.waveHeightInPixel = 200;
+                layoutOptions.waveBackgroundColorHex = 'f8f8f8';
+                layoutOptions.peakWidthInPixel = 2;
+                layoutOptions.spaceWidthInPixel = 1;
+                layoutOptions.waveTopPercentage = 70;
+                layoutOptions.peakTopColorHex = '6c00ff';
+                layoutOptions.peakBottomColorHex = 'bd8cff';
+                layoutOptions.peakTopProgressColorHex = '5000bc';
+                layoutOptions.peakBottomProgressColorHex = '947ab8';
                 
                 waveform.setLayoutOptions(layoutOptions);
 
@@ -128,16 +133,6 @@ require([
 
                 // set waveform data
                 waveform.setWaveData(data);
-
-                // set the optioms
-                var layoutOptions = {};
-
-                layoutOptions.waveHeight = 100;
-                layoutOptions.peakWidth = 2;
-                layoutOptions.spaceWidth = 1;
-                layoutOptions.peakColorHex = '#6600FF';
-                
-                waveform.setLayoutOptions(layoutOptions);
 
                 // draw the waveform using the waveform module
                 waveform.draw();
