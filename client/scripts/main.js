@@ -84,8 +84,8 @@ require([
                 layoutOptions.waveTopPercentage = 70;
                 layoutOptions.peakTopColorHex = '6c00ff';
                 layoutOptions.peakBottomColorHex = 'bd8cff';
-                layoutOptions.peakTopProgressColorHex = '5000bc';
-                layoutOptions.peakBottomProgressColorHex = '947ab8';
+                layoutOptions.peakTopProgressColorHex = '380085';
+                layoutOptions.peakBottomProgressColorHex = '8265ab';
                 
                 waveform.setLayoutOptions(layoutOptions);
 
