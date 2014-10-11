@@ -142,8 +142,6 @@ define([
             this.canvasContext.stroke();
             
         }
-        
-        addClickListener.call(this);
 
     };
     
@@ -280,6 +278,8 @@ define([
         this.canvasContext = context;
         
         this.$canvasElement = $(this.canvasContext.canvas);
+        
+        addClickListener.call(this);
         
     };
     

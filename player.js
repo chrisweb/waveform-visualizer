@@ -65,7 +65,7 @@ define([
         // the time right now (since the this.audiocontext got created)
         this.track.startTime = this.currentTrackSource.context.currentTime;
         
-        console.log('startTime: ', this.track.startTime);
+        //console.log('startTime: ', this.track.startTime);
 
         this.currentTrackSource.start(0, this.track.playTimeOffset);
         
@@ -87,9 +87,9 @@ define([
         
         this.currentTrackSource.stop();
         
-        var pauseTime = this.currentTrackSource.context.currentTime;
+        var timeAtPause = this.currentTrackSource.context.currentTime;
         
-        this.track.playTimeOffset += pauseTime - this.track.startTime;
+        this.track.playTimeOffset += timeAtPause - this.track.startTime;
         
         stopTimer.call(this);
         
@@ -107,6 +107,7 @@ define([
      */
     player.prototype.stop = function stopFunction(trackId, trackFormat) {
         
+        // stop the track playback
         this.currentTrackSource.stop(0);
         
         stopTimer.call(this);
@@ -149,7 +150,7 @@ define([
     
     /**
      * 
-     * start timer
+     * starts the timer that triggers the progress events
      * 
      * @returns {undefined}
      */
@@ -163,7 +164,7 @@ define([
     
     /**
      * 
-     * stop timer
+     * stops the timer that triggers the progress events
      * 
      * @returns {undefined}
      */
@@ -199,9 +200,21 @@ define([
      */
     var startListeningForPositionChange = function startListeningForPositionChangeFunction() {
         
+        var that = this;
+        
         this.events.on('waveform:position', function(trackPositionInPercent) {
             
-            console.log(trackPositionInPercent);
+            //console.log(trackPositionInPercent);
+
+            // stop the track playback
+            that.stop();
+
+            var trackPositionInSeconds = (that.currentTrackSource.buffer.duration / 100) * trackPositionInPercent;
+            
+            that.track.playTimeOffset = trackPositionInSeconds;
+
+            // start the playback at the given position
+            that.play();
             
         });
         
