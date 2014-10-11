@@ -3,13 +3,16 @@
  * player
  * 
  * @param {type} EventsManager
+ * @param {type} AudioContextManager
  * @returns {player_L7.player}
  */
 define([
-    'event'
+    'event',
+    'audio'
     
 ], function (
-    EventsManager
+    EventsManager,
+    AudioContextManager
 ) {
 
     'use strict';
@@ -24,7 +27,7 @@ define([
     var player = function playerConstructor(options) {
         
         this.audioContext;
-        this.currentTrackSource;
+        this.audioGraph;
         this.track;
         this.intervalHandler;
         
@@ -56,22 +59,27 @@ define([
      */
     player.prototype.play = function playFunction() {
         
-        this.currentTrackSource = this.audioContext.createBufferSource();
-
-        this.currentTrackSource.buffer = this.track.buffer;
-
-        this.currentTrackSource.connect(this.audioContext.destination);
+        if (this.audioGraph === undefined) {
+            
+            this.createAudioGraph();
+            
+        }
+        
+        // add a buffered song to the source node
+        this.audioGraph.sourceNode.buffer = this.track.buffer;
         
         // the time right now (since the this.audiocontext got created)
-        this.track.startTime = this.currentTrackSource.context.currentTime;
+        this.track.startTime = this.audioGraph.sourceNode.context.currentTime;
         
         //console.log('startTime: ', this.track.startTime);
 
-        this.currentTrackSource.start(0, this.track.playTimeOffset);
+        this.audioGraph.sourceNode.start(0, this.track.playTimeOffset);
         
         startTimer.call(this);
         
         startListeningForPositionChange.call(this);
+        
+        this.track.isPlaying = true;
         
     };
     
@@ -79,21 +87,21 @@ define([
      * 
      * pause
      * 
-     * @param {type} trackId
-     * @param {type} trackFormat
      * @returns {undefined}
      */
-    player.prototype.pause = function pauseFunction(trackId, trackFormat) {
+    player.prototype.pause = function pauseFunction() {
         
-        this.currentTrackSource.stop();
+        if (!this.track.isPlaying) {
+            
+            return;
+            
+        }
         
-        var timeAtPause = this.currentTrackSource.context.currentTime;
+        var timeAtPause = this.audioGraph.sourceNode.context.currentTime;
         
         this.track.playTimeOffset += timeAtPause - this.track.startTime;
         
-        stopTimer.call(this);
-        
-        stopListeningForPositionChange.call(this);
+        this.stop();
         
     };
     
@@ -101,18 +109,36 @@ define([
      * 
      * stop
      * 
-     * @param {type} trackId
-     * @param {type} trackFormat
      * @returns {undefined}
      */
-    player.prototype.stop = function stopFunction(trackId, trackFormat) {
+    player.prototype.stop = function stopFunction() {
+        
+        if (!this.track.isPlaying) {
+            
+            return;
+            
+        }
         
         // stop the track playback
-        this.currentTrackSource.stop(0);
+        this.audioGraph.sourceNode.stop(0);
         
         stopTimer.call(this);
         
         stopListeningForPositionChange.call(this);
+        
+        this.track.isPlaying = false;
+        
+    };
+    
+    /**
+     * 
+     * create a new audio context
+     * 
+     * @returns {undefined}
+     */
+    player.prototype.createAudioContext = function createAudioContextFunction() {
+        
+        this.audioContext = AudioContextManager.getContext();
         
     };
     
@@ -131,6 +157,55 @@ define([
     
     /**
      * 
+     * create an audio graph
+     * 
+     * @returns {undefined}
+     */
+    player.prototype.createAudioGraph = function createAudioGraphFunction() {
+        
+        if (this.audioContext === undefined) {
+            
+            this.createAudioContext();
+            
+        }
+        
+        this.audioGraph = {};
+        
+        // create an audio buffer source node
+        this.audioGraph.sourceNode = this.audioContext.createBufferSource();
+        
+        // create a gain node
+        this.audioGraph.gainNode = this.audioContext.createGain();
+        
+        // connect the source node to the gain node
+        this.audioGraph.sourceNode.connect(this.audioGraph.gainNode);
+        
+        // create a panner node
+        this.audioGraph.pannerNode = this.audioContext.createPanner();
+        
+        // connect the gain node to the panner node
+        this.audioGraph.gainNode.connect(this.audioGraph.pannerNode);
+        
+        // connect to the panner node to the destination (speakers)
+        this.audioGraph.pannerNode.connect(this.audioContext.destination);
+        
+    };
+    
+    /**
+     * 
+     * set an external audio graph
+     * 
+     * @param {type} audioGraph
+     * @returns {undefined}
+     */
+    player.prototype.setAudioGraph = function setAudioGraphFunction(audioGraph) {
+        
+        this.audioGraph = audioGraph;
+        
+    };
+    
+    /**
+     * 
      * set buffer
      * 
      * @param {type} buffer
@@ -141,10 +216,46 @@ define([
         // create a new track object
         this.track = {
             playTimeOffset: 0,
-            currentTime: 0
+            currentTime: 0,
+            buffer: null,
+            startTime: 0,
+            playTime: 0,
+            playedTimePercentage: 0,
+            isPlaying: false
         };
         
         this.track.buffer = buffer;
+        
+    };
+    
+    /**
+     * 
+     * panner node change
+     * 
+     * @param {type} left
+     * @param {type} right
+     * @returns {undefined}
+     */
+    player.prototype.pannerChange = function(left, right) {
+        
+        // https://developer.mozilla.org/en-US/docs/Web/API/PannerNode
+        
+        this.audioGraph.pannerNode.setPosition(0, 0, 0);
+        
+    };
+    
+    /**
+     * 
+     * gain node volume change
+     * 
+     * @param {type} volumeInPercent
+     * @returns {undefined}
+     */
+    player.prototype.volumeChange = function(volumeInPercent) {
+        
+        // https://developer.mozilla.org/en-US/docs/Web/API/GainNode
+        
+        this.audioGraph.gainNode.value = volumeInPercent / 100;
         
     };
     
@@ -182,7 +293,7 @@ define([
      */
     var triggerProgressEvent = function triggerProgressEventFunction() {
 
-        var timeNow = this.currentTrackSource.context.currentTime;
+        var timeNow = this.audioGraph.sourceNode.context.currentTime;
         
         this.track.playTime = (timeNow - this.track.startTime) + this.track.playTimeOffset;
         
@@ -209,7 +320,7 @@ define([
             // stop the track playback
             that.stop();
 
-            var trackPositionInSeconds = (that.currentTrackSource.buffer.duration / 100) * trackPositionInPercent;
+            var trackPositionInSeconds = (that.audioGraph.sourceNode.buffer.duration / 100) * trackPositionInPercent;
             
             that.track.playTimeOffset = trackPositionInSeconds;
 

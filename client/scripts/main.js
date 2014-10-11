@@ -157,7 +157,7 @@ require([
     
     var addPlayer = function addPlayer(waveform, options) {
         
-        // AUDIO 2
+        // create an audio context
         var audioContext = audio.getContext();
         
         ajax.getAudioBuffer(options, audioContext, function(error, trackBuffer) {
