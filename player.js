@@ -65,13 +65,15 @@ define([
             
         }
         
-        // add a buffered song to the source node
-        this.audioGraph.sourceNode.buffer = this.track.buffer;
+        if (this.audioGraph.sourceNode.buffer === null) { 
+        
+            // add a buffered song to the source node
+            this.audioGraph.sourceNode.buffer = this.track.buffer;
+        
+        }
         
         // the time right now (since the this.audiocontext got created)
         this.track.startTime = this.audioGraph.sourceNode.context.currentTime;
-        
-        //console.log('startTime: ', this.track.startTime);
 
         this.audioGraph.sourceNode.start(0, this.track.playTimeOffset);
         
@@ -127,6 +129,11 @@ define([
         stopListeningForPositionChange.call(this);
         
         this.track.isPlaying = false;
+        
+        // after a stop you cant call a start again, you need to create a new
+        // source node, this means that we unset the audiograph after a stop
+        // so that it gets recreated on the next play
+        this.audioGraph = undefined;
         
     };
     
