@@ -30,6 +30,7 @@ define([
         this.waveData;
         this.waveLayoutOptions;
         this.firstDrawing = true;
+        this.latestRange;
         
         if (options !== undefined) {
             
@@ -56,6 +57,32 @@ define([
         this.events = new EventsManager();
         
     };
+
+    var lastLoop = (new Date()).getMilliseconds();
+    var count = 1;
+    var fps = 0;
+
+    waveform.prototype.fps = function fpsFunction() {
+        
+        var currentLoop = (new Date()).getMilliseconds();
+
+        if (lastLoop > currentLoop) {
+
+            fps = count;
+            
+            console.log('fps: ' + fps);
+            
+            count = 1;
+
+        } else {
+
+            count += 1;
+
+        }
+
+        lastLoop = currentLoop;
+        
+    };
     
     /**
      * 
@@ -66,26 +93,43 @@ define([
      */
     waveform.prototype.draw = function drawWaveFunction(range) {
 
+        // measure fps
+        this.fps();
+
         var waveLayoutOptions = setDefaultLayoutOptionsIfNotSet(this.waveLayoutOptions);
 
         var peaksLength = this.waveData.length;
-        var canvasHeight = waveLayoutOptions.waveHeightInPixel;
         
         // the canvas width is the width of all the peaks, plus the width of
         // all the spaces, the amount of spaces is equal to the amount of peaks
         // minus one
         var canvasWidth = (peaksLength * waveLayoutOptions.peakWidthInPixel) + ((peaksLength - 1) * waveLayoutOptions.spaceWidthInPixel);
         
+        var peaksRange = 0;
+        
+        if (range !== undefined) {
+        
+            var peaksPercentage = peaksLength / 100;
+        
+            peaksRange = Math.round(range * peaksPercentage);
+            
+            // if the range did not change since last draw don't redraw
+            if (peaksRange === this.latestRange) {
+                
+                return;
+                
+            }
+            
+            this.latestRange = peaksRange;
+            
+        }
+        
+        var canvasHeight = waveLayoutOptions.waveHeightInPixel;
+        
         // canvas dimensions
         this.$canvasElement.attr('height', canvasHeight);
         this.$canvasElement.attr('width', canvasWidth);
-        
-        // canvas background color
-        this.canvasContext.fillStyle = '#' + waveLayoutOptions.waveBackgroundColorHex;
-        this.canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
-        
-        var i;
-        
+
         // each peak is the line and the line width is the peak width
         this.canvasContext.lineWidth = waveLayoutOptions.peakWidthInPixel;
         
@@ -95,15 +139,11 @@ define([
         // the max height of the bottom peaks
         var bottomPeakMaxHeightInPixel = waveLayoutOptions.waveHeightInPixel  * ((100 - waveLayoutOptions.waveTopPercentage) / 100);
         
-        var peaksRange = 0;
+        // canvas background color
+        this.canvasContext.fillStyle = '#' + waveLayoutOptions.waveBackgroundColorHex;
+        this.canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         
-        if (range !== undefined) {
-        
-            var peaksPercentage = peaksLength / 100;
-        
-            peaksRange = Math.round(range * peaksPercentage);
-        
-        }
+        var i;
         
         for (i = 0; i < peaksLength; i++) {
             
