@@ -327,7 +327,7 @@ define([
             // stop the track playback
             that.stop();
 
-            var trackPositionInSeconds = (that.audioGraph.sourceNode.buffer.duration / 100) * trackPositionInPercent;
+            var trackPositionInSeconds = (that.track.buffer.duration / 100) * trackPositionInPercent;
             
             that.track.playTimeOffset = trackPositionInSeconds;
 
