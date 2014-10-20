@@ -9,7 +9,7 @@
  * 
  */
 require.config({
-    baseUrl: '/scripts',
+    baseUrl: 'client/scripts',
     paths: {
         'jquery': 'vendor/jquery/dist/jquery',
         'waveform': 'library/waveform',

@@ -1,4 +1,4 @@
 {
-    "directory": "client/scripts/vendor",
+    "directory": "examples/client/scripts/vendor",
     "analytics": false
 }

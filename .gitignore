@@ -17,7 +17,7 @@ Thumbs.db
 desktop.ini
 
 node_modules
-client/scripts/vendor
+examples/client/scripts/vendor
 yeoman
 nbproject
 .sass-cache
