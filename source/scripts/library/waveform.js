@@ -332,7 +332,23 @@ define([
      */
     waveform.prototype.setWaveData = function setWaveDataFunction(data) {
         
-        this.waveData = data;
+        if (data !== undefined) {
+        
+            if (data instanceof Array) {
+
+                this.waveData = data;
+
+            } else if (data.peaks !== undefined) {
+
+                if (data.peaks instanceof Array) {
+
+                    this.waveData = data.peaks;
+
+                }
+
+            }
+            
+        }
         
     };
 
