@@ -13,16 +13,18 @@ require.config({
     paths: {
         // vendor scripts
         'jquery': 'vendor/jquery/dist/jquery',
-        'player': 'vendor/web-audio-api-player/source/player',
-        'ajax': 'vendor/web-audio-api-player/source/ajax',
-        'audio': 'vendor/web-audio-api-player/source/audio',
+
+        // player
+        'player.core': 'vendor/web-audio-api-player/source/player',
+        'player.audio': 'vendor/web-audio-api-player/source/audio',
         
         // own small event manager for this example
         'event': 'library/event',
         
         // waveform visualizer scripts
         'canvas': '../../../source/scripts/library/canvas',
-        'waveform': '../../../source/scripts/library/waveform'
+        'waveform': '../../../source/scripts/library/waveform',
+        'waveform.ajax': 'vendor/web-audio-api-player/source/ajax'
     }
     
 });
@@ -33,23 +35,20 @@ require.config({
  * 
  * @param {type} $
  * @param {type} ajax
- * @param {type} Waveform
- * @param {type} canvas
  * @param {type} audio
- * @param {type} Player
+ * @param {type} EventsManager
+ * 
  * @returns {undefined}
  */
 require([
     'jquery',
-    'ajax',
-    'waveform',
-    'canvas',
-    'audio',
-    'player'
+    'waveform.ajax',
+    'player.audio',
+    'event'
     
-], function ($, ajax, Waveform, canvas, audio, Player) {
+], function ($, ajax, audio, EventsManager) {
 
-    var addPlayer = function addPlayer(waveform, options) {
+    var addPlayer = function addPlayer(options) {
         
         // create an audio context
         var audioContext = audio.getContext();

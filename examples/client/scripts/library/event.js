@@ -1,6 +1,7 @@
 /**
  * 
  * events manager
+ * 
  * simplified events manager based on backbone.events
  * extends this to add your own events manager
  * 
@@ -24,8 +25,6 @@ define([
      */
     var eventsManager = function eventsManagerConstructor() {
         
-        //this.events = events;
-        
         this.events = events;
         
     };
@@ -40,6 +39,12 @@ define([
      * @returns {undefined}
      */
     eventsManager.prototype.on = function onFunction(name, callback, context) {
+        
+        if (name === undefined) {
+            
+            return;
+            
+        }
         
         var eventsContainer;
         
@@ -98,7 +103,11 @@ define([
      */
     eventsManager.prototype.once = function onFunction(name, callback, context) {
 
-        //console.log('once');
+        if (name === undefined) {
+            
+            return;
+            
+        }
         
         var that = this;
 
