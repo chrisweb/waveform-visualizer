@@ -3,6 +3,10 @@ waveform-visualizer
 
 Visualizes waveform data (peaks) that got generated using: https://github.com/chrisweb/waveform-data-generator
 
+![](https://github.com/chrisweb/waveform-visualizer/blob/master/examples/images/waveform.png)
+
+Waveform created using the visualizer with data from waveform data generator
+
 Getting started
 ---------------
 
