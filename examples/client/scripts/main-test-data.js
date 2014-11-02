@@ -15,15 +15,17 @@ require.config({
         'jquery': 'vendor/jquery/dist/jquery',
 
         // player
-        'player.core': 'vendor/web-audio-api-player/source/player',
+        'player.core': 'vendor/web-audio-api-player/source/core',
         'player.audio': 'vendor/web-audio-api-player/source/audio',
+        'player.ui': 'vendor/web-audio-api-player/source/ui',
+        'player.ajax': 'vendor/web-audio-api-player/source/ajax',
         
         // own small event manager for this example
         'event': 'library/event',
         
         // waveform visualizer scripts
-        'canvas': '../../../source/scripts/library/canvas',
-        'waveform': '../../../source/scripts/library/waveform',
+        'waveform.canvas': '../../../source/scripts/library/canvas',
+        'waveform.core': '../../../source/scripts/library/core',
         'waveform.ajax': 'vendor/web-audio-api-player/source/ajax'
     }
     
@@ -34,73 +36,41 @@ require.config({
  * main require
  * 
  * @param {type} $
- * @param {type} ajax
- * @param {type} audio
- * @param {type} EventsManager
+ * @param {type} waveformCanvas
+ * @param {type} WaveformCore
+ * @param {type} PlayerUI
+ * @param {type} PlayerCore
  * 
  * @returns {undefined}
  */
 require([
     'jquery',
-    'waveform.ajax',
-    'player.audio',
-    'event'
+    'waveform.canvas',
+    'waveform.core',
+    'player.ui',
+    'player.core'
     
-], function ($, ajax, audio, EventsManager) {
+], function ($, waveformCanvas, WaveformCore, PlayerUI, PlayerCore) {
 
     var addPlayer = function addPlayer(options) {
         
-        // create an audio context
-        var audioContext = audio.getContext();
-        
-        ajax.getAudioBuffer(options, audioContext, function(error, trackBuffer) {
-            
-            // if there was no error on the server
-            if (!error) {
+        var $playerElement = $('#player');
 
-                // player
-                var player = new Player({ audioContext: audioContext });
-                
-                player.setBuffer(trackBuffer);
-                
-                var $button = $('<button>');
-                
-                $button.addClass('play').text('>');
-                
-                var $body = $('body');
-                
-                $body.find('.player').append($button);
-                
-                $button.on('click', function() {
-                    
-                    if ($(this).hasClass('play')) {
-                    
-                        player.play();
-                        
-                        $button.removeClass('play').addClass('pause').text('||');
-                        
-                        waveform.updateRangeStart();
-                        
-                    } else {
-                        
-                        player.pause();
-                        
-                        $button.removeClass('pause').addClass('play').text('>');
-                        
-                        waveform.updateRangeStop();
-                        
-                    }
-                    
-                });
-                
-            } else {
-                
-                // log the server error
-                console.log(error);
-                
-            }
+        var playerUI = new PlayerUI({ $element: $playerElement });
+        
+        playerUI.createPlayPauseButton();
+        
+        if (options.trackFormat === 'mp3') {
             
-        });
+            var formatCode = 'mp32';
+            
+        }
+        
+        var trackUrl = 'https://storage-new.newjamendo.com/download/track/' + options.trackId + '/' + formatCode;
+        
+        var playerCore = new PlayerCore({ 'trackUrl': trackUrl });
+        
+        playerCore.startListening();
         
     };
     
@@ -110,9 +80,9 @@ require([
         // get the canvas element
         var $element = $('#serverWaveForm');
 
-        var canvasContext = canvas.getContext($element);
+        var canvasContext = waveformCanvas.getContext($element);
 
-        var waveform = new Waveform({
+        var waveform = new WaveformCore({
             canvasContext: canvasContext
         });
 
@@ -120,6 +90,9 @@ require([
 
         // set waveform data
         waveform.setWaveData(data);
+        
+        // start listening for player events
+        waveform.startListening();
 
         // set the optioms
         var layoutOptions = {};
@@ -142,9 +115,9 @@ require([
         var trackOptions = {};
 
         trackOptions.trackId = 1100511;
-        trackOptions.trackFormat = 'ogg';
+        trackOptions.trackFormat = 'mp3';
 
-        addPlayer(waveform, trackOptions);
+        addPlayer(trackOptions);
         
     });
     

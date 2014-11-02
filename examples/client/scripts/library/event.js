@@ -17,6 +17,8 @@ define([
     
     var events = {};
     
+    var constants = {};
+    
     /**
      * 
      * events manager constructor
@@ -26,6 +28,22 @@ define([
     var eventsManager = function eventsManagerConstructor() {
         
         this.events = events;
+        
+        this.constants = constants;
+        
+        // player events
+        this.constants.positionEvent = 'player:position';
+        this.constants.progressEvent = 'player:progress';
+        this.constants.playEvent = 'player:play';
+        this.constants.pauseEvent = 'player:pause';
+        this.constants.stopEvent = 'player:stop';
+        this.constants.volumeEvent = 'player:volume';
+        this.constants.pannerEvent = 'player:panner';
+        this.constants.playbackRateEvent = 'player:playbackRate';
+        this.constants.bufferingEvent = 'player:bufferingEvent';
+        
+        // waveform events
+        this.constants.clickEvent = 'waveform:clickEvent';
         
     };
     
