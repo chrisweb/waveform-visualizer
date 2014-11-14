@@ -31,6 +31,7 @@ define([
         this.waveLayoutOptions;
         this.firstDrawing = true;
         this.latestRange;
+        this._plugins = [];
         
         if (options !== undefined) {
             
@@ -69,8 +70,6 @@ define([
         if (lastLoop > currentLoop) {
 
             fps = count;
-            
-            console.log('fps: ' + fps);
             
             count = 1;
 
@@ -364,6 +363,38 @@ define([
         this.waveLayoutOptions = layoutOptions;
         
     };
+    
+    function callPlugin(method, datas, breakValue) {
+        
+        for (var i = 0, len = this._plugins.length; i < len; ++i) {
+            
+            if (!(method in this._plugins[i])) {
+                
+                continue;
+                
+            }
+            
+            var returnValue = this._plugins[i][method].apply(this, datas);
+            
+            if (breakValue !== undefined && returnValue === breakValue) {
+                
+                return false;
+                
+            }
+            
+        }
+        
+        return true;
+        
+    }
+    
+    waveform.prototype.addPlugin = function addPluginFunction(plugin) {
+        
+        this._plugins.push(plugin);
+        
+    };
+    
+    waveform.prototype._plugins = null;
 
     var drawStop = false;
     var frameHandle;
@@ -378,11 +409,13 @@ define([
         
         var that = this;
 
-        var frameHandle = requestFrame(function() {
+        frameHandle = requestFrame(function() {
 
             if (!drawStop) {
                 
-                that.events.once(that.events.constants.progressEvent, function(range) {
+                that.events.once(that.events.constants.progressEvent, function(data) {
+
+                    var range = (data.position/data.duration)*100;
 
                     // redraw wave with different color until song progress
                     that.draw(range);
@@ -436,16 +469,24 @@ define([
         var that = this;
 
         // on play listen for progress
-        this.events.on(this.events.constants.playEvent, function() {
+        this.events.on(this.events.constants.playEvent, function waveformPlayerPlayListener(isPlaying) {
             
-            that.updateRangeStart();
+            if (isPlaying && callPlugin.call(that, 'onPlay', arguments, false)) {
+            
+                that.updateRangeStart();
+                
+            }
             
         });
         
         // on stop, stop listening for progress
-        this.events.on(this.events.constants.stopEvent, function() {
+        this.events.on(this.events.constants.stopEvent, function waveformPlayerStopListener(isPlaying) {
             
-            that.updateRangeStop();
+            if (!isPlaying) {
+            
+                that.updateRangeStop();
+                
+            }
             
         });
         
