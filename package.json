@@ -1,0 +1,32 @@
+{
+  "name": "waveform-visualizer",
+  "version": "0.4.0",
+  "description": "nodejs and web audio api waveform visualizer",
+  "main": "",
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisweb/waveform-visualizer.git"
+  },
+  "keywords": [
+    "waveform",
+    "visualizer",
+    "canvas",
+    "javascript"
+  ],
+  "author": "chrisweb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrisweb/waveform-visualizer/issues"
+  },
+  "homepage": "https://github.com/chrisweb/waveform-visualizer#readme",
+  "devDependencies": {
+    "rollup": "1.17.0",
+    "rollup-plugin-typescript2": "0.22.1",
+    "tslint": "5.18.0",
+    "tslint-eslint-rules": "5.4.0",
+    "typescript": "3.5.3"
+  }
+}

@@ -1,18 +1,4 @@
-/**
- * 
- * canvas
- * 
- * https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
- * 
- * @returns {canvas_L6.canvasAnonym$1}
- */
-define([
 
-], function (
-
-) {
-
-    'use strict';
     
     /**
      * 
@@ -35,5 +21,3 @@ define([
     return {
         getContext: getContext
     };
-
-});

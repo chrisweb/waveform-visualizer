@@ -1,74 +1,13 @@
 
-'use strict';
-
-/**
- * 
- * http://requirejs.org/
- * 
- * require configuration
- * 
- */
-require.config({
-    baseUrl: 'client/scripts',
-    paths: {
-        // vendor scripts
-        'jquery': 'vendor/jquery/dist/jquery',
-
-        // player
-        'player.core': 'vendor/web-audio-api-player/source/core',
-        'player.audio': 'vendor/web-audio-api-player/source/audio',
-        'player.ui': 'vendor/web-audio-api-player/source/ui',
-        'player.ajax': 'vendor/web-audio-api-player/source/ajax',
-        
-        // own small event manager for this example
-        'event': 'library/event',
-        
-        // waveform visualizer scripts
-        'waveform.canvas': '../../../source/scripts/library/canvas',
-        'waveform.core': '../../../source/scripts/library/core',
-        'waveform.ajax': 'vendor/web-audio-api-player/source/ajax'
-    }
-    
-});
-
-/**
- * 
- * main require
- * 
- * @param {type} $
- * @param {type} waveformCanvas
- * @param {type} WaveformCore
- * @param {type} PlayerUI
- * @param {type} PlayerCore
- * 
- * @returns {undefined}
- */
-require([
-    'jquery',
-    'waveform.canvas',
-    'waveform.core',
-    'player.ui',
-    'player.core'
-    
-], function ($, waveformCanvas, WaveformCore, PlayerUI, PlayerCore) {
-
     var addPlayer = function addPlayer(options) {
         
         var $playerElement = $('#player');
 
-        var playerUI = new PlayerUI({ $element: $playerElement });
         
-        playerUI.createPlayPauseButton();
-        
-        if (options.trackFormat === 'mp3') {
-            
-            var formatCode = 'mp32';
-            
-        }
         
         var trackUrl = 'https://storage-new.newjamendo.com/download/track/' + options.trackId + '/' + formatCode;
         
-        var playerCore = new PlayerCore({ 'trackUrl': trackUrl });
+        var playerCore = new Player({ 'trackUrl': trackUrl });
         
         playerCore.startListening();
         
@@ -120,6 +59,3 @@ require([
         addPlayer(trackOptions);
         
     });
-    
-    
-});

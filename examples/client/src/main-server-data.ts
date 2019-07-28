@@ -1,57 +1,4 @@
 
-'use strict';
-
-/**
- * 
- * http://requirejs.org/
- * 
- * require configuration
- * 
- */
-require.config({
-    baseUrl: 'client/scripts',
-    paths: {
-        // vendor scripts
-        'jquery': 'vendor/jquery/dist/jquery',
-        'player': 'vendor/web-audio-api-player/source/player',
-        'ajax': 'vendor/web-audio-api-player/source/ajax',
-        'audio': 'vendor/web-audio-api-player/source/audio',
-        
-        // own small event manager for this example
-        'event': 'library/event',
-        
-        // waveform visualizer scripts
-        'canvas': '../../../source/scripts/library/canvas',
-        'waveform': '../../../source/scripts/library/waveform'
-    }
-    
-});
-
-/**
- * 
- * main require
- * 
- * @param {type} $
- * @param {type} ajax
- * @param {type} Waveform
- * @param {type} canvas
- * @param {type} audio
- * @param {type} Player
- * @returns {undefined}
- */
-require([
-    'jquery',
-    'ajax',
-    'waveform',
-    'canvas',
-    'audio',
-    'player'
-    
-], function ($, ajax, Waveform, canvas, audio, Player) {
-    
-    // on dom load
-    $(function() {
-
         // WAVEFORM 1
         var options = {};
 
@@ -218,5 +165,3 @@ require([
         });
         
     };
-    
-});

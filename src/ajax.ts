@@ -1,19 +1,4 @@
-/**
- * 
- * ajax
- * 
- * @param {type} $
- * @returns {ajax_L7.ajaxAnonym$1}
- */
-define([
-    'jquery'
-    
-], function (
-    $
-) {
 
-    'use strict';
-    
     /**
      * 
      * get the peaks data from server
@@ -96,5 +81,3 @@ define([
     return {
         getWaveDataFromServer: getWaveDataFromServer
     };
-
-});

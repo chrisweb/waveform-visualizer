@@ -1,20 +1,3 @@
-/**
- * 
- * waveform
- * 
- * @param {type} $
- * @param {type} EventsManager
- * @returns {waveform_L8.waveform}
- */
-define([
-    'jquery',
-    'event'
-    
-], function (
-    $, EventsManager
-) {
-
-    'use strict';
 
     /**
      * 
@@ -514,9 +497,3 @@ define([
         
     })();
     
-    /**
-     * public functions
-     */
-    return waveform;
-
-});

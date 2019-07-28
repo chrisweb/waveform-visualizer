@@ -1,0 +1,25 @@
+{
+    "name": "waveform-visualizer_client_examples",
+    "version": "0.6.0",
+    "description": "nodejs and web audio api waveform visualizer examples",
+    "main": "",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chrisweb/waveform-visualizer.git"
+    },
+    "keywords": [
+        "waveform",
+        "visualizer",
+        "canvas",
+        "javascript"
+    ],
+    "author": "chrisweb",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/chrisweb/waveform-visualizer/issues"
+    },
+    "homepage": "https://github.com/chrisweb/waveform-visualizer#readme",
+    "devDependencies": {
+        "web-audio-api-player": "1.0.0"
+    }
+}
