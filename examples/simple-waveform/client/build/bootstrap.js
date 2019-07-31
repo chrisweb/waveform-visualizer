@@ -1,23 +1,21 @@
-
+/*
     var addPlayer = function addPlayer(options) {
-        
+
         var $playerElement = $('#player');
 
-        
-        
         var trackUrl = 'https://storage-new.newjamendo.com/download/track/' + options.trackId + '/' + formatCode;
-        
+
         var playerCore = new Player({ 'trackUrl': trackUrl });
-        
+
         playerCore.startListening();
-        
+
     };
-    
+
     // on dom load
     $(function() {
-        
+
         // get the canvas element
-        var $element = $('#serverWaveForm');
+        var $element = $('#waveform');
 
         var canvasContext = waveformCanvas.getContext($element);
 
@@ -29,7 +27,7 @@
 
         // set waveform data
         waveform.setWaveData(data);
-        
+
         // start listening for player events
         waveform.startListening();
 
@@ -57,5 +55,7 @@
         trackOptions.trackFormat = 'mp3';
 
         addPlayer(trackOptions);
-        
+
     });
+    */
+//# sourceMappingURL=bootstrap.js.map

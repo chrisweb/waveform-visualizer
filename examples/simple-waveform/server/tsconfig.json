@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "build/",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "target": "esnext",
+    "module": "esnext",
+    "lib": [
+      "es5",
+      "es6",
+      "es7",
+      "esnext"
+    ],
+    "jsx": "react",
+    "allowJs": false,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true, /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
+    "esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+  },
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}

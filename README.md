@@ -1,3 +1,7 @@
+[![Dependencies](https://david-dm.org/chrisweb/waveform-visualizer/status.svg)](https://david-dm.org/chrisweb/waveform-visualizer)
+[![Dependencies](https://david-dm.org/chrisweb/waveform-visualizer/dev-status.png)](https://david-dm.org/chrisweb/waveform-visualizer)
+[![GitHub release](https://img.shields.io/github/release/chrisweb/waveform-visualizer.svg)](https://github.com/chrisweb/waveform-visualizer/releases)
+
 # waveform-visualizer
 
 Visualizes waveform data (peaks), for example the ones that got generated using: https://github.com/chrisweb/waveform-data-generator

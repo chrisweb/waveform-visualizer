@@ -1,46 +1,134 @@
+import { Canvas } from './canvas';
+import { Events } from './events';
 
-    /**
-     * 
-     * waveform constructor
-     * 
-     * @param {type} options
-     * @returns {undefined}
-     */
-    var waveform = function waveformConstructor(options) {
-        
-        this.canvasContext;
-        this.$canvasElement;
-        this.waveData;
-        this.waveLayoutOptions;
-        this.firstDrawing = true;
-        this.latestRange;
-        this._plugins = [];
-        
-        if (options !== undefined) {
-            
-            if (options.canvasContext !== undefined) {
-                
-                this.setCanvasContext(options.canvasContext);
-                
-            }
-            
-            if (options.data !== undefined) {
-                
-                this.setWaveData(options.data);
-                
-            }
-            
-            if (options.layout !== undefined) {
-                
-                this.setLayoutOptions(options.layout);
-                
-            }            
-            
-        }
-        
-        this.events = new EventsManager();
-        
+export interface ICoreOptions {
+    canvasContext: CanvasRenderingContext2D;
+    data: [];
+    layout: IWaveLayoutOptions;
+}
+
+export interface IWaveLayoutOptions {
+    readonly waveHeightInPixel: number;
+    readonly waveBackgroundColorHex: string;
+    readonly peakWidthInPixel: number;
+    readonly spaceWidthInPixel: number;
+    readonly waveTopPercentage: number;
+    readonly peakTopColorHex: string;
+    readonly peakBottomColorHex: string;
+    readonly peakTopProgressColorHex: string;
+    readonly peakBottomProgressColorHex: string;
+}
+
+export class Waveform {
+
+    static layoutOptions: IWaveLayoutOptions = {
+        waveHeightInPixel: 200,
+        waveBackgroundColorHex: 'f8f8f8',
+        peakWidthInPixel: 2,
+        spaceWidthInPixel: 1,
+        waveTopPercentage: 70,
+        peakTopColorHex: '6c00ff',
+        peakBottomColorHex: 'bd8cff',
+        peakTopProgressColorHex : '380085',
+        peakBottomProgressColorHex: '8265ab'
     };
+
+    protected canvasContext: CanvasRenderingContext2D;
+    protected canvasElement: HTMLCanvasElement;
+    protected waveData: [];
+    protected waveLayoutOptions: IWaveLayoutOptions;
+    protected firstDrawing: boolean = true;
+    protected latestRange: number;
+    protected _plugins: [] = [];
+    protected events: Events;
+
+    constructor(waveformOptions: ICoreOptions) {
+
+        if (waveformOptions !== undefined) {
+
+            if (waveformOptions.canvasContext !== undefined) {
+
+                this.setCanvasContext(waveformOptions.canvasContext);
+
+            }
+
+            if (waveformOptions.data !== undefined) {
+
+                this.setWaveData(waveformOptions.data);
+
+            }
+
+            if (waveformOptions.layout !== undefined) {
+
+                this.setLayoutOptions(waveformOptions.layout);
+
+            }
+
+        }
+
+        this.events = new Events();
+
+    }
+
+    public setCanvasContext(canvasContext: CanvasRenderingContext2D): void {
+
+        this.canvasContext = canvasContext;
+
+        this.canvasElement = this.canvasContext.canvas;
+
+        this.activateClickListener();
+
+    }
+
+    public setWaveData(data: []): void {
+
+        this.waveData = data;
+
+    }
+
+    public setLayoutOptions(layout: IWaveLayoutOptions): void {
+
+        this.waveLayoutOptions = layout;
+
+    }
+
+    protected activateClickListener() {
+
+        this.canvasElement.addEventListener('click', this.canvasElementClick);
+
+    }
+
+    protected canvasElementClick(event: MouseEvent) {
+
+        event.preventDefault();
+
+        let canvasPositionInPixel = this.getMousePosition(event);
+
+        let pixelsPerPercent = this.canvasElement.width / 100;
+
+        let trackPositionInPercent = canvasPositionInPixel / pixelsPerPercent;
+
+        console.log(trackPositionInPercent);
+
+        this.events.trigger(this.events.constants.clickEvent, trackPositionInPercent);
+
+    }
+
+    protected getMousePosition(event: MouseEvent): number {
+
+        let boundingClientRectangle = this.canvasElement.getBoundingClientRect();
+
+        let position = event.clientX - boundingClientRectangle.left;
+
+        //console.log(position);
+
+        return position;
+
+    }
+
+
+
+/*
 
     var lastLoop = (new Date()).getMilliseconds();
     var count = 1;
@@ -66,13 +154,6 @@
         
     };
     
-    /**
-     * 
-     * draw the canvas wave form
-     * 
-     * @param {type} range
-     * @returns {undefined}
-     */
     waveform.prototype.draw = function drawWaveFunction(range) {
 
         // measure fps
@@ -166,14 +247,7 @@
         }
 
     };
-    
-    /**
-     * 
-     * set default layout options if not yet set by user
-     * 
-     * @param {type} userWaveLayoutOptions
-     * @returns {unresolved}
-     */
+
     var setDefaultLayoutOptionsIfNotSet = function setDefaultLayoutOptionsIfNotSetFunction(userWaveLayoutOptions) {
         
         if (userWaveLayoutOptions === undefined) {
@@ -240,78 +314,12 @@
         
     };
     
-    /**
-     * 
-     * add a click listener to the canvas waveform
-     * 
-     * @returns {undefined}
-     */
-    var addClickListener = function addClickListenerFunction() {
-        
-        var that = this;
-        
-        this.$canvasElement.on('click', function(event) {
-            
-            event.preventDefault();
-            
-            var canvasPositionInPixel = getMousePosition(this, event);
-            
-            var pixelsPerPercent = that.$canvasElement.context.width / 100;
-            
-            var trackPositionInPercent = canvasPositionInPixel / pixelsPerPercent;
-            
-            //console.log(trackPositionInPercent);
-            
-            that.events.trigger(that.events.constants.clickEvent, trackPositionInPercent);
-            
-        });
-        
-    };
+
     
-    /**
-     * 
-     * get the mouse position of the click on the canvas
-     * 
-     * @param {type} element
-     * @param {type} event
-     * @returns {undefined}
-     */
-    var getMousePosition = function getMousePositionFunction(element, event) {
-        
-        var boundingClientRectangle = element.getBoundingClientRect();
-        
-        var position = event.clientX - boundingClientRectangle.left;
-        
-        //console.log(position);
-        
-        return position;
-        
-    };
+
     
-    /**
-     * 
-     * set the canvas context
-     * 
-     * @param {type} context
-     * @returns {undefined}
-     */
-    waveform.prototype.setCanvasContext = function setCanvasContextFunction(context) {
-        
-        this.canvasContext = context;
-        
-        this.$canvasElement = $(this.canvasContext.canvas);
-        
-        addClickListener.call(this);
-        
-    };
+
     
-    /**
-     * 
-     * set wave data
-     * 
-     * @param {type} data
-     * @returns {undefined}
-     */
     waveform.prototype.setWaveData = function setWaveDataFunction(data) {
         
         if (data !== undefined) {
@@ -334,13 +342,6 @@
         
     };
 
-    /**
-     * 
-     * set layout options
-     * 
-     * @param {type} layoutOptions
-     * @returns {undefined}
-     */
     waveform.prototype.setLayoutOptions = function setLayoutOptionsFunction(layoutOptions) {
         
         this.waveLayoutOptions = layoutOptions;
@@ -382,12 +383,6 @@
     var drawStop = false;
     var frameHandle;
     
-    /**
-     * 
-     * update the range display in the waveform
-     * 
-     * @returns {undefined}
-     */
     var drawRange = function drawRangeFunction() {
         
         var that = this;
@@ -412,12 +407,7 @@
         });
         
     };
-    
-    /**
-     * 
-     * start updating range
-     * 
-     */
+
     waveform.prototype.updateRangeStart = function drawRangeFunction() {
         
         drawStop = false;
@@ -426,12 +416,6 @@
         
     };
     
-    /**
-     * 
-     * stop updating range
-     * 
-     * @returns {undefined}
-     */
     waveform.prototype.updateRangeStop = function updateRangeStopFunction() {
         
         drawStop = true;
@@ -475,13 +459,7 @@
         
     };
 
-    /**
-     * 
-     * request (animation) frame
-     * 
-     * @param {type} callback
-     * @returns {Window.requestAnimationFrame|window.requestAnimationFrame|Function|window.oRequestAnimationFrame|Window.oRequestAnimationFrame|Window.webkitRequestAnimationFrame|window.webkitRequestAnimationFrame|Window.msRequestAnimationFrame|window.msRequestAnimationFrame|Window.mozRequestAnimationFrame|window.mozRequestAnimationFrame}
-     */
+
     var requestFrame = (function requestFrameFunction(callback) {
         
         // requestAnimationFrame() shim by Paul Irish
@@ -496,4 +474,8 @@
                 };
         
     })();
+    */
+
+
+}
     

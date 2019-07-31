@@ -31,3 +31,6 @@ nbproject/private
 .ntvs_analysis.dat.tmp
 *.njsperf
 Output-Npm.txt
+
+# rollup-plugin-typescript2 cache
+.rpt2_cache
