@@ -1,6 +1,6 @@
 {
   "name": "waveform-visualizer_example_simple-waveform_client",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "(audio) waveform visualizer example simple waveform client",
   "keywords": [
     "canvas",
@@ -26,7 +26,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "web-audio-api-player": "1.0.0"
+    "web-audio-api-player": "1.0.1"
   },
   "devDependencies": {
     "tslint": "5.18.0",
