@@ -18,8 +18,14 @@ Check out the [examples directory](/examples/README.md)
 * You will also have to install git (http://git-scm.com/download)
 * Use git to clone this project locally
 * Use your command line tool and go to the root of this project (type: cd /LOCAL_PROJECT_PATH)
-* install the gulp cli globally npm install gulp-cli -g
-* 
+* TODO
+
+## TODOs
+
+* convert code to typescript
+* finish "installing guide" of the readme
+* add eslint package, setup linting, add script to package json, add linting guide to readme
+* put latest version on npmjs.com
 
 ## license
 

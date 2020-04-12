@@ -21,12 +21,17 @@
   "bugs": {
     "url": "https://github.com/chrisweb/waveform-visualizer/issues"
   },
+  "scripts": {
+    "build": "rollup -c ./scripts/dist.js",
+    "watch": "rollup -cw ./scripts/dist.js",
+    "lint": ""
+  },
   "homepage": "https://github.com/chrisweb/waveform-visualizer#readme",
   "devDependencies": {
-    "rollup": "1.17.0",
-    "rollup-plugin-typescript2": "0.22.1",
-    "tslint": "5.18.0",
+    "rollup": "2.6.0",
+    "rollup-plugin-typescript2": "0.27.0",
+    "tslint": "6.1.1",
     "tslint-eslint-rules": "5.4.0",
-    "typescript": "3.5.3"
+    "typescript": "3.8.3"
   }
 }
