@@ -6,7 +6,7 @@
 
 Visualizes waveform data (peaks), for example the ones that got generated using: <https://github.com/chrisweb/waveform-data-generator>
 
-![audio waveform visualizer output: waveform image](/examples/images/waveform.png)
+![audio waveform visualizer output: waveform image](examples/images/waveform.png)
 
 Waveform created using the visualizer with data using the "chrisweb waveform data generator"
 
