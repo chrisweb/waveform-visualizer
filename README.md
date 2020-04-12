@@ -1,5 +1,7 @@
 # waveform-visualizer
 
+🚨⚠️ project is being re-written lot of things might currently be broken
+
 Visualizes waveform data (peaks), for example the ones that got generated using: https://github.com/chrisweb/waveform-data-generator
 
 ![](https://github.com/chrisweb/waveform-visualizer/blob/master/examples/images/waveform.png)
