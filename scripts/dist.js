@@ -1,7 +1,7 @@
 import typescript from 'rollup-plugin-typescript2'
 import pkg from '../package.json'
 export default {
-  input: 'src/core.ts',
+  input: 'src/index.ts',
   output: [
     {
       file: pkg.main,
@@ -17,7 +17,7 @@ export default {
   ],
 plugins: [
     typescript({
-        tsconfig: "src/tsconfig.json",
+        tsconfig: "tsconfig.json",
         useTsconfigDeclarationDir: true
     }),
   ],

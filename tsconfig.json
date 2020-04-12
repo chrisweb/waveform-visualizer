@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+      "declaration": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "module": "es6",
+      "moduleResolution": "node",
+      "rootDir": "./src",
+      "outDir": "dist",
+      "inlineSourceMap": true,
+      "declarationDir": "dist",
+      "noImplicitAny": true,
+      "noFallthroughCasesInSwitch": true,
+      "skipDefaultLibCheck": true,
+      "skipLibCheck": true,
+      "lib": [
+        "es5",
+        "es6",
+        "es7",
+        "esnext",
+        "dom"
+      ],
+      "target": "es5"
+    },
+    "exclude": [
+      "node_modules",
+      "examples",
+      "scripts",
+      "dist"
+    ]
+  }
