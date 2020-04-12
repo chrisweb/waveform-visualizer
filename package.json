@@ -35,8 +35,6 @@
   "devDependencies": {
     "rollup": "2.6.0",
     "rollup-plugin-typescript2": "0.27.0",
-    "tslint": "6.1.1",
-    "tslint-eslint-rules": "5.4.0",
     "typescript": "3.8.3"
   }
 }
