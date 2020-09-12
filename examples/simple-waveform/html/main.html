@@ -3,16 +3,23 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>waveform prototype</title>
-        <script src="client/bootstrap.js" type="module"></script>
+        <title>waveform visualizer prototype</title>
         <script src="client/bootstrap.js" type="module"></script>
     </head>
     <body>
-        <h1>waveform prototype</h1>
+        <h1>waveform visualizer prototype</h1>
         <canvas id="waveform"></canvas>
-        <div id="player">
-            <button value="play" id="player-button-play">></button>
-            <button value="pause" id="player-button-pause">||</button>
-        </div>
+        <section id="js-player">
+            <div id="js-buttons-box" data-player-context="off">
+                <button id="js-play-pause-button" class="button">
+                    <span id="js-play">▶️</span>
+                    <span id="js-pause" class="hidden">⏸️</span>
+                </button>
+                <button id="js-stop-button" class="button">
+                    <span id="js-stop">⏹️</span>
+                </button>
+            </div>
+            <input type="range" min="0" max="100" value="0" step="1" id="js-player-volume" />
+        </section>
     </body>
 </html>

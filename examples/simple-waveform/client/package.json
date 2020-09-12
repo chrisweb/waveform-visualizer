@@ -22,14 +22,12 @@
   "scripts": {
     "build": "tsc -p ./",
     "build:debug": "tsc -p ./ --listFiles --traceResolution",
-    "lint": "tslint -p ./",
-    "watch": "tsc -w"
+    "watch": "tsc -p ./ -w"
   },
   "dependencies": {
-    "web-audio-api-player": "1.0.1"
+    "web-audio-api-player": "2.0.2"
   },
   "devDependencies": {
-    "tslint": "5.18.0",
-    "typescript": "3.5.3"
+    "typescript": "4.0.2"
   }
 }

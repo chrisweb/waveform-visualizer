@@ -1,12 +1,7 @@
 import {
     Waveform,
     ICoreOptions,
-    IWaveLayoutOptions,
-    Events,
-    ICallback,
-    IEvent,
-    IEvents,
-    IConstants
+    IWaveLayoutOptions
 } from '../../../../../dist/index.js';
 
 export class Visualizer {

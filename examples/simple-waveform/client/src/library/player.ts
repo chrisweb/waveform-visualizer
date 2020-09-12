@@ -18,8 +18,8 @@ export class Player {
             console.log(error);
         });
 
-        let playButtonElement = document.getElementById('player-button-play');
-        let pauseButtonElement = document.getElementById('player-button-play');
+        let playButtonElement = document.getElementById('js-play-pause-button');
+        let stopButtonElement = document.getElementById('js-stop-button');
 
         document.addEventListener('click', this.resumeAudioContext);
         document.addEventListener('touch', this.resumeAudioContext);

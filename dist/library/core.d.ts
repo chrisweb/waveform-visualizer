@@ -1,9 +1,9 @@
-import { Events } from './events';
 export interface ICoreOptions {
     canvasContext?: CanvasRenderingContext2D;
     canvasElement?: HTMLCanvasElement;
     data?: number[];
     layout?: IWaveLayoutOptions;
+    waveformClickCallback?: IWaveformClickCallback;
 }
 export interface IWaveLayoutOptions {
     readonly waveHeightInPixel?: number;
@@ -16,23 +16,31 @@ export interface IWaveLayoutOptions {
     readonly peakTopProgressColorHex?: string;
     readonly peakBottomProgressColorHex?: string;
 }
+export interface IWaveformClickCallback {
+    (clickHorizontalPositionInPercent: number): void;
+}
 export declare class Waveform {
     static layoutOptions: IWaveLayoutOptions;
-    protected canvasContext: CanvasRenderingContext2D;
-    protected canvasElement: HTMLCanvasElement;
-    protected waveData: number[];
-    protected waveLayoutOptions: IWaveLayoutOptions;
-    protected firstDrawing: boolean;
-    protected latestRange: number;
+    protected _canvasContext: CanvasRenderingContext2D;
+    protected _canvasElement: HTMLCanvasElement;
+    protected _waveData: number[];
+    protected _waveLayoutOptions: IWaveLayoutOptions;
+    protected _firstDrawing: boolean;
+    protected _latestRange: number;
     protected _plugins: [];
-    protected events: Events;
+    protected _waveformClickCallback: IWaveformClickCallback | null;
     constructor(waveformOptions?: ICoreOptions);
     setCanvasContext(canvasContext: CanvasRenderingContext2D): void;
+    getCanvasContext(): CanvasRenderingContext2D;
     setCanvasElement(canvasElement: HTMLCanvasElement): void;
+    getCanvasElement(): HTMLCanvasElement;
     setWaveData(data: number[]): void;
+    getWaveData(): number[];
     setLayoutOptions(layout: IWaveLayoutOptions): void;
-    protected activateClickListener(): void;
-    protected canvasElementClick(event: MouseEvent): void;
-    protected getMousePosition(event: MouseEvent): number;
+    getLayoutOptions(): IWaveLayoutOptions;
+    setWaveformClickCallback(waveformClickCallback: IWaveformClickCallback): void;
+    getWaveformClickCallback(): IWaveformClickCallback;
+    protected _canvasElementClick(event: MouseEvent): void;
+    protected _getMouseHorizontalPosition(event: MouseEvent): number;
     draw(range?: number): void;
 }
