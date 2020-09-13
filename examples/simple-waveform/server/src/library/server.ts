@@ -28,7 +28,7 @@ export class Server {
 
     }
 
-    public run() {
+    public run(): void {
 
         const META = import.meta as IImportMeta;
         const DIRNAME = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(META.url));
@@ -43,7 +43,7 @@ export class Server {
         this.application.get('/', (request: express.Request, response: express.Response) => {
 
             // options list: http://expressjs.com/en/api.html#res.sendFile
-            let mainPageSendfileOptions = {
+            const mainPageSendfileOptions = {
                 root: path.join(ROOTPATH, '..', 'html'),
                 dotfiles: 'deny',
                 headers: {
@@ -56,7 +56,7 @@ export class Server {
 
         });
 
-        let port = process.env.PORT || 35000;
+        const port = process.env.PORT || 35000;
 
         this.application.listen(port, () => console.log(`Example app listening on port ${port}!`));
 

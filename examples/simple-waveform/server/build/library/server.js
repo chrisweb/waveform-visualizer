@@ -23,7 +23,7 @@ export class Server {
         this.application.use('/node_modules/web-audio-api-player/dist', express.static(ROOTPATH + '/../client/node_modules/web-audio-api-player/dist'));
         this.application.get('/', (request, response) => {
             // options list: http://expressjs.com/en/api.html#res.sendFile
-            let mainPageSendfileOptions = {
+            const mainPageSendfileOptions = {
                 root: path.join(ROOTPATH, '..', 'html'),
                 dotfiles: 'deny',
                 headers: {
@@ -33,7 +33,7 @@ export class Server {
             };
             response.sendFile('main.html', mainPageSendfileOptions);
         });
-        let port = process.env.PORT || 35000;
+        const port = process.env.PORT || 35000;
         this.application.listen(port, () => console.log(`Example app listening on port ${port}!`));
     }
 }

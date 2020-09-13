@@ -42,7 +42,7 @@ export class Waveform {
     protected _canvasElement: HTMLCanvasElement;
     protected _waveData: number[];
     protected _waveLayoutOptions: IWaveLayoutOptions;
-    protected _firstDrawing: boolean = true;
+    protected _firstDrawing = true;
     protected _latestRange: number;
     protected _plugins: [] = [];
     protected _waveformClickCallback: IWaveformClickCallback | null = null;
@@ -105,7 +105,7 @@ export class Waveform {
 
         this._canvasElement = canvasElement;
 
-        let canvas = new Canvas();
+        const canvas = new Canvas();
 
         try {
             this._canvasContext = canvas.getContext(canvasElement);
@@ -138,7 +138,7 @@ export class Waveform {
 
     public setLayoutOptions(layout: IWaveLayoutOptions): void {
 
-        let waveLayoutOptions = Object.assign(Waveform.layoutOptions, layout);
+        const waveLayoutOptions = Object.assign(Waveform.layoutOptions, layout);
 
         this._waveLayoutOptions = waveLayoutOptions;
 
@@ -172,11 +172,11 @@ export class Waveform {
 
         event.preventDefault();
 
-        let canvasHorizontalPositionInPixel = this._getMouseHorizontalPosition(event);
+        const canvasHorizontalPositionInPixel = this._getMouseHorizontalPosition(event);
 
-        let pixelsPerPercent = this._canvasElement.width / 100;
+        const pixelsPerPercent = this._canvasElement.width / 100;
 
-        let clickHorizontalPositionInPercent = canvasHorizontalPositionInPixel / pixelsPerPercent;
+        const clickHorizontalPositionInPercent = canvasHorizontalPositionInPixel / pixelsPerPercent;
 
         if (this._waveformClickCallback !== null) {
             this._waveformClickCallback(clickHorizontalPositionInPercent);
@@ -186,9 +186,9 @@ export class Waveform {
 
     protected _getMouseHorizontalPosition(event: MouseEvent): number {
 
-        let boundingClientRectangle = this._canvasElement.getBoundingClientRect();
+        const boundingClientRectangle = this._canvasElement.getBoundingClientRect();
 
-        let position = event.clientX - boundingClientRectangle.left;
+        const position = event.clientX - boundingClientRectangle.left;
 
         return position;
 

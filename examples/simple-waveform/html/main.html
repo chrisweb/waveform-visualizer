@@ -5,10 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>waveform visualizer prototype</title>
         <script src="client/bootstrap.js" type="module"></script>
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
     </head>
     <body>
         <h1>waveform visualizer prototype</h1>
-        <canvas id="waveform"></canvas>
+        <canvas id="waveformCanvas"></canvas>
         <section id="js-player">
             <div id="js-buttons-box" data-player-context="off">
                 <button id="js-play-pause-button" class="button">
@@ -19,7 +24,7 @@
                     <span id="js-stop">⏹️</span>
                 </button>
             </div>
-            <input type="range" min="0" max="100" value="0" step="1" id="js-player-volume" />
+            <input type="range" min="0" max="100" value="80" step="1" id="js-player-volume" />
         </section>
     </body>
 </html>
