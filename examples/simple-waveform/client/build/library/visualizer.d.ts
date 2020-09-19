@@ -6,5 +6,5 @@ export interface IVisualizerOptions {
 export declare class Visualizer {
     protected waveform: Waveform;
     constructor(visualizerOptions: IVisualizerOptions);
-    draw(): void;
+    draw(playingProgress: number): void;
 }

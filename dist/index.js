@@ -95,6 +95,10 @@ var Waveform = /** @class */ (function () {
         var position = event.clientX - boundingClientRectangle.left;
         return position;
     };
+    /**
+     *
+     * @param range
+     */
     Waveform.prototype.draw = function (range) {
         // measure fps
         //this.fps();

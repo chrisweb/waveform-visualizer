@@ -1,4 +1,4 @@
-import { Player, IListenersOptions } from './library/player.js';
+import { Player, IListenersOptions, onPlaylingCallbackType, onStoppedCallbackType } from './library/player.js';
 import { Visualizer, IVisualizerOptions } from './library/Visualizer.js';
 
 const player = new Player();
@@ -9,9 +9,28 @@ const listenerOptions: IListenersOptions = {
     volumeSliderId: 'js-player-volume',
 }
 
+const onPlaylingCallback: onPlaylingCallbackType = (playingProgress, maximumValue, currentValue) => {
+
+    console.log('onPlaylingCallback,  playingProgress, maximumValue, currentValue: ', playingProgress, maximumValue, currentValue);
+
+    visualizer.draw(playingProgress);
+
+}
+
+const onStoppedCallback: onStoppedCallbackType = (playTimeOffset) => {
+
+    console.log('onStoppedCallback, playTimeOffset: ', playTimeOffset);
+
+    visualizer.draw(0);
+
+}
+
 const songId = 1100511;
 
-player.loadSong(songId);
+const song = player.loadSong(songId);
+
+song.onPlaying = onPlaylingCallback;
+song.onStopped = onStoppedCallback;
 
 player.initializeClickListeners(listenerOptions);
 
@@ -24,4 +43,4 @@ const visualizerOptions: IVisualizerOptions = {
 
 const visualizer = new Visualizer(visualizerOptions);
 
-visualizer.draw();
+visualizer.draw(0);

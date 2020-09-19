@@ -6,8 +6,18 @@ const listenerOptions = {
     stopButtonElementId: 'js-stop-button',
     volumeSliderId: 'js-player-volume',
 };
+const onPlaylingCallback = (playingProgress, maximumValue, currentValue) => {
+    console.log('onPlaylingCallback,  playingProgress, maximumValue, currentValue: ', playingProgress, maximumValue, currentValue);
+    visualizer.draw(playingProgress);
+};
+const onStoppedCallback = (playTimeOffset) => {
+    console.log('onStoppedCallback, playTimeOffset: ', playTimeOffset);
+    visualizer.draw(0);
+};
 const songId = 1100511;
-player.loadSong(songId);
+const song = player.loadSong(songId);
+song.onPlaying = onPlaylingCallback;
+song.onStopped = onStoppedCallback;
 player.initializeClickListeners(listenerOptions);
 // visualizer initialisation
 const visualizerOptions = {
@@ -16,5 +26,5 @@ const visualizerOptions = {
     canvasElementId: 'waveformCanvas'
 };
 const visualizer = new Visualizer(visualizerOptions);
-visualizer.draw();
+visualizer.draw(0);
 //# sourceMappingURL=bootstrap.js.map

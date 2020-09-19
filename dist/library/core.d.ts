@@ -42,5 +42,9 @@ export declare class Waveform {
     getWaveformClickCallback(): IWaveformClickCallback;
     protected _canvasElementClick(event: MouseEvent): void;
     protected _getMouseHorizontalPosition(event: MouseEvent): number;
+    /**
+     *
+     * @param range
+     */
     draw(range?: number): void;
 }

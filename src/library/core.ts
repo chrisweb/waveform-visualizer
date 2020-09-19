@@ -168,7 +168,7 @@ export class Waveform {
 
     }*/
 
-    protected _canvasElementClick(event: MouseEvent) {
+    protected _canvasElementClick(event: MouseEvent): void {
 
         event.preventDefault();
 
@@ -193,8 +193,12 @@ export class Waveform {
         return position;
 
     }
-
-    public draw(range?: number) {
+    
+    /**
+     * 
+     * @param range 
+     */
+    public draw(range?: number): void {
 
         // measure fps
         //this.fps();

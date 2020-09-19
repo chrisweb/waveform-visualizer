@@ -17,8 +17,8 @@ export class Visualizer {
         waveform.setCanvasElement(canvasElement);
         this.waveform = waveform;
     }
-    draw() {
-        this.waveform.draw();
+    draw(playingProgress) {
+        this.waveform.draw(playingProgress);
     }
 }
 //# sourceMappingURL=Visualizer.js.map

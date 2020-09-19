@@ -39,9 +39,9 @@ export class Visualizer {
 
     }
 
-    public draw(): void {
+    public draw(playingProgress: number): void {
 
-        this.waveform.draw();
+        this.waveform.draw(playingProgress);
 
     } 
 
