@@ -40,6 +40,7 @@ export declare class Waveform {
     getLayoutOptions(): IWaveLayoutOptions;
     setWaveformClickCallback(waveformClickCallback: IWaveformClickCallback): void;
     getWaveformClickCallback(): IWaveformClickCallback;
+    protected _activateClickListener(): void;
     protected _canvasElementClick(event: MouseEvent): void;
     protected _getMouseHorizontalPosition(event: MouseEvent): number;
     /**

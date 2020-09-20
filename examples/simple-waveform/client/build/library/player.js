@@ -4,7 +4,7 @@ export class Player {
         const playerOptions = {
             soundsBaseUrl: 'https://mp3l.jamendo.com/?trackid=',
             playingProgressIntervalTime: 500,
-            loadSoundMode: PlayerCore.SOUND_MODE_AUDIO
+            loadPlayerMode: PlayerCore.PLAYER_MODE_AUDIO
         };
         const player = new PlayerCore(playerOptions);
         this.player = player;
@@ -48,6 +48,9 @@ export class Player {
         const song = this.player.addSoundToQueue({ soundAttributes: songAttributes });
         //console.log(song);
         return song;
+    }
+    goToPosition(positionInPercent) {
+        this.player.setPosition(positionInPercent);
     }
     _playPauseAction() {
         if (this.isPlayOrPause === 'play') {

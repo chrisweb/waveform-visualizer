@@ -12,6 +12,7 @@ export declare class Player {
     protected isPlayOrPause: string;
     constructor();
     loadSong(songId: number): ISound;
+    goToPosition(positionInPercent: number): void;
     protected _playPauseAction(): void;
     protected _buttonDomPause(): void;
     protected _buttonDomPlay(): void;

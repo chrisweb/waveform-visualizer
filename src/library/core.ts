@@ -91,7 +91,7 @@ export class Waveform {
 
         this._canvasElement = this._canvasContext.canvas;
 
-        //this._activateClickListener();
+        this._activateClickListener();
 
     }
 
@@ -114,7 +114,7 @@ export class Waveform {
             console.log(error);
         }
 
-        //this._activateClickListener();
+        this._activateClickListener();
 
     }
 
@@ -162,11 +162,11 @@ export class Waveform {
 
     }
 
-    /*protected _activateClickListener() {
+    protected _activateClickListener(): void {
 
-        this._canvasElement.addEventListener('click', this.canvasElementClick);
+        this._canvasElement.addEventListener('click', (event: MouseEvent) => { this._canvasElementClick(event) });
 
-    }*/
+    }
 
     protected _canvasElementClick(event: MouseEvent): void {
 

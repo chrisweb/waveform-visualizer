@@ -20,7 +20,7 @@ export class Player {
         const playerOptions: ICoreOptions = {
             soundsBaseUrl: 'https://mp3l.jamendo.com/?trackid=',
             playingProgressIntervalTime: 500,
-            loadSoundMode: PlayerCore.SOUND_MODE_AUDIO
+            loadPlayerMode: PlayerCore.PLAYER_MODE_AUDIO
         };
 
         const player = new PlayerCore(playerOptions);
@@ -76,6 +76,12 @@ export class Player {
         return song;
 
     }
+
+    public goToPosition(positionInPercent: number): void {
+
+        this.player.setPosition(positionInPercent);
+
+    } 
 
     protected _playPauseAction(): void {
 

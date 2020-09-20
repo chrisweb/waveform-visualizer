@@ -1,12 +1,14 @@
 import {
     Waveform,
     IWaveLayoutOptions,
-    ICoreOptions
+    ICoreOptions,
+    IWaveformClickCallback,
 } from '../../../../../dist/index.js';
 
 export interface IVisualizerOptions {
     waveformData: number[]
     canvasElementId: string;
+    waveformClickCallback: IWaveformClickCallback
 }
 
 export class Visualizer {
@@ -26,7 +28,8 @@ export class Visualizer {
         const waveformOptions: ICoreOptions = {
             layout: waveLayoutOptions,
             // tslint:disable-next-line
-            data: visualizerOptions.waveformData
+            data: visualizerOptions.waveformData,
+            waveformClickCallback: visualizerOptions.waveformClickCallback,
         };
 
         const waveform = new Waveform(waveformOptions);

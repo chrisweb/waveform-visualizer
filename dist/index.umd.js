@@ -43,7 +43,7 @@
         Waveform.prototype.setCanvasContext = function (canvasContext) {
             this._canvasContext = canvasContext;
             this._canvasElement = this._canvasContext.canvas;
-            //this._activateClickListener();
+            this._activateClickListener();
         };
         Waveform.prototype.getCanvasContext = function () {
             return this._canvasContext;
@@ -58,7 +58,7 @@
                 // TODO: handle error properly
                 console.log(error);
             }
-            //this._activateClickListener();
+            this._activateClickListener();
         };
         Waveform.prototype.getCanvasElement = function () {
             return this._canvasElement;
@@ -82,11 +82,10 @@
         Waveform.prototype.getWaveformClickCallback = function () {
             return this._waveformClickCallback;
         };
-        /*protected _activateClickListener() {
-
-            this._canvasElement.addEventListener('click', this.canvasElementClick);
-
-        }*/
+        Waveform.prototype._activateClickListener = function () {
+            var _this = this;
+            this._canvasElement.addEventListener('click', function (event) { _this._canvasElementClick(event); });
+        };
         Waveform.prototype._canvasElementClick = function (event) {
             event.preventDefault();
             var canvasHorizontalPositionInPixel = this._getMouseHorizontalPosition(event);

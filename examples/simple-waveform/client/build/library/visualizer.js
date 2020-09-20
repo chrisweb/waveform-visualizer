@@ -1,4 +1,4 @@
-import { Waveform } from '../../../../../dist/index.js';
+import { Waveform, } from '../../../../../dist/index.js';
 export class Visualizer {
     constructor(visualizerOptions) {
         const customLayoutOptions = {
@@ -10,7 +10,8 @@ export class Visualizer {
         const waveformOptions = {
             layout: waveLayoutOptions,
             // tslint:disable-next-line
-            data: visualizerOptions.waveformData
+            data: visualizerOptions.waveformData,
+            waveformClickCallback: visualizerOptions.waveformClickCallback,
         };
         const waveform = new Waveform(waveformOptions);
         const canvasElement = document.getElementById(visualizerOptions.canvasElementId);
