@@ -25,7 +25,8 @@
     "watch": "tsc -p ./ -w"
   },
   "dependencies": {
-    "web-audio-api-player": "3.0.1"
+    "web-audio-api-player": "3.0.2",
+    "waveform-visualizer": "2.0.0"
   },
   "devDependencies": {
     "typescript": "4.0.3"

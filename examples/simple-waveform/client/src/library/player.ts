@@ -36,7 +36,7 @@ export class Player {
         this.isPlayOrPause = 'pause';
 
     }
-    
+
     public loadSong(songId: number): ISound {
 
         const songAttributes: ISoundAttributes = {
@@ -81,7 +81,7 @@ export class Player {
 
         this.player.setPosition(positionInPercent);
 
-    } 
+    }
 
     protected _playPauseAction(): void {
 

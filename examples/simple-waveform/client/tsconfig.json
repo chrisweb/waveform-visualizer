@@ -7,6 +7,7 @@
       "noImplicitAny": true,
       "target": "esnext",
       "module": "esnext",
+      "moduleResolution": "Node",
       "lib": [
         "es5",
         "es6",

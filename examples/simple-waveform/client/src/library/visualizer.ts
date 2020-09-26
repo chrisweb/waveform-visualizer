@@ -3,7 +3,9 @@ import {
     IWaveLayoutOptions,
     ICoreOptions,
     IWaveformClickCallback,
-} from '../../../../../dist/index.js';
+//} from '../../../../../dist/index.js';
+} from '../../node_modules/waveform-visualizer/dist/index.js';
+
 
 export interface IVisualizerOptions {
     waveformData: number[]
@@ -46,6 +48,6 @@ export class Visualizer {
 
         this.waveform.draw(playingProgress);
 
-    } 
+    }
 
 }

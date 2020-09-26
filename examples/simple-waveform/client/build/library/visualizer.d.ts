@@ -1,4 +1,4 @@
-import { Waveform, IWaveformClickCallback } from '../../../../../dist/index.js';
+import { Waveform, IWaveformClickCallback } from '../../node_modules/waveform-visualizer/dist/index.js';
 export interface IVisualizerOptions {
     waveformData: number[];
     canvasElementId: string;

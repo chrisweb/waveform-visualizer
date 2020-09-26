@@ -39,6 +39,7 @@ export class Server {
         this.application.use('/client', express.static(ROOTPATH + '/../client/build'));
         this.application.use('/dist', express.static(ROOTPATH + '/../../../dist'));
         this.application.use('/node_modules/web-audio-api-player/dist', express.static(ROOTPATH + '/../client/node_modules/web-audio-api-player/dist'));
+        this.application.use('/node_modules/waveform-visualizer/dist', express.static(ROOTPATH + '/../client/node_modules/waveform-visualizer/dist'));
 
         this.application.get('/', (request: express.Request, response: express.Response) => {
 

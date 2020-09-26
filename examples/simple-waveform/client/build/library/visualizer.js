@@ -1,4 +1,4 @@
-import { Waveform, } from '../../../../../dist/index.js';
+import { Waveform, } from '../../node_modules/waveform-visualizer/dist/index.js';
 export class Visualizer {
     constructor(visualizerOptions) {
         const customLayoutOptions = {
