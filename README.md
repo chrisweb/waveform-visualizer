@@ -1,5 +1,5 @@
-
 [![npm version](https://img.shields.io/npm/v/waveform-visualizer.svg?style=flat)](https://www.npmjs.com/package/waveform-visualizer)
+[![minified size](https://img.shields.io/bundlephobia/min/waveform-visualizer?style=flat)](https://www.npmjs.com/package/waveform-visualizer)
 [![GitHub license](https://img.shields.io/github/license/chrisweb/waveform-visualizer)](https://github.com/chrisweb/waveform-visualizer/blob/master/LICENSE)
 
 # waveform-visualizer
@@ -69,6 +69,18 @@ when you are done coding, commit your local changes (if your commit is related t
 `git commit -m "#TICKER_NUMBER commit message"`
 
 now open your forks github URL in your browser and hit the pull request button
+
+## note to self: publish package on npmjs.com
+
+login to npmjs.com  
+
+`npm login`
+
+!!! before using the next the command ensure the version of your package in the package.json has been updated  
+
+publish a new version on npmjs  
+
+`npm publish`
 
 ## license
 
