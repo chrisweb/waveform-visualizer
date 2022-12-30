@@ -1,20 +1,16 @@
-// es6 import http://2ality.com/2014/09/es6-modules-final.html
 // vendor
 import express from 'express';
 // nodejs
 import path from 'path';
-// hack because __dirname is not defined
-// https://github.com/nodejs/node/issues/16844
-// fileURLToPath got added in nodejs v10.12.0
 import { fileURLToPath } from 'url';
-//}
 export class Server {
+    application;
     constructor() {
         // create a new expressjs application
         this.application = express();
     }
     run() {
-        const META = (import.meta);
+        const META = import.meta;
         const DIRNAME = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(META.url));
         const ROOTPATH = path.join(DIRNAME, '..', '..');
         console.log('ROOTPATH: ', ROOTPATH);
@@ -30,7 +26,7 @@ export class Server {
                 headers: {
                     'x-timestamp': Date.now(),
                     'x-sent': true
-                }
+                },
             };
             response.sendFile('main.html', mainPageSendfileOptions);
         });

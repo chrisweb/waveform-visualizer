@@ -1,10 +1,13 @@
 import { PlayerCore } from '../../node_modules/web-audio-api-player/dist/index.js';
-export class Player {
+export class PlayerExample {
+    player;
+    playerAudioContext;
+    isPlayOrPause;
     constructor() {
         const playerOptions = {
             soundsBaseUrl: 'https://mp3l.jamendo.com/?trackid=',
             playingProgressIntervalTime: 500,
-            loadPlayerMode: PlayerCore.PLAYER_MODE_AUDIO
+            loadPlayerMode: PlayerCore.PLAYER_MODE_AUDIO,
         };
         const player = new PlayerCore(playerOptions);
         this.player = player;
@@ -20,33 +23,33 @@ export class Player {
             source: [{ url: songId + '&format=mp31', codec: 'mp3' }, { url: songId + '&format=ogg1', codec: 'ogg', isPreferred: true }],
             id: songId,
             onLoading: (loadingProgress, maximumValue, currentValue) => {
-                //console.log('loading: ', loadingProgress, maximumValue, currentValue);
+                //console.log('loading: ', loadingProgress, maximumValue, currentValue)
             },
             onPlaying: (playingProgress, maximumValue, currentValue) => {
-                //console.log('playing: ', playingProgress, maximumValue, currentValue);
-                //console.log('firstSound.duration: ', song.duration);
+                //console.log('playing: ', playingProgress, maximumValue, currentValue)
+                //console.log('firstSound.duration: ', song.duration)
             },
             onStarted: (playTimeOffset) => {
-                //console.log('started', playTimeOffset);
+                //console.log('started', playTimeOffset)
             },
             onPaused: (playTimeOffset) => {
-                //console.log('paused', playTimeOffset);
+                //console.log('paused', playTimeOffset)
             },
             onStopped: (playTimeOffset) => {
-                //console.log('stopped', playTimeOffset);
+                //console.log('stopped', playTimeOffset)
             },
             onResumed: (playTimeOffset) => {
-                //console.log('resumed', playTimeOffset);
+                //console.log('resumed', playTimeOffset)
             },
             onEnded: (willPlayNext) => {
-                //console.log('ended', willPlayNext);
+                //console.log('ended', willPlayNext)
                 if (!willPlayNext) {
                     this._stopAction();
                 }
-            }
+            },
         };
         const song = this.player.addSoundToQueue({ soundAttributes: songAttributes });
-        //console.log(song);
+        //console.log(song)
         return song;
     }
     goToPosition(positionInPercent) {

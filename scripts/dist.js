@@ -1,24 +1,19 @@
 import typescript from 'rollup-plugin-typescript2'
-import pkg from '../package.json'
+import pkg from '../package.json' assert { type: "json" }
 export default {
-  input: 'src/index.ts',
-  output: [
-    {
-      file: pkg.main,
-      format: 'umd',
-      name: pkg.name,
-      sourcemap: true
-    },
-    {
-      file: pkg.module,
-      format: 'esm',
-      sourcemap: true
-    },
-  ],
-plugins: [
-    typescript({
-        tsconfig: "tsconfig.json",
-        useTsconfigDeclarationDir: true
-    }),
-  ],
+    input: 'src/index.ts',
+    output: [
+        {
+            file: pkg.main,
+            format: 'esm',
+            name: pkg.name,
+            sourcemap: true
+        },
+    ],
+    plugins: [
+        typescript({
+            tsconfig: "tsconfig.json",
+            useTsconfigDeclarationDir: true
+        }),
+    ],
 }

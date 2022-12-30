@@ -1,5 +1,6 @@
-import { Waveform, } from '../../node_modules/waveform-visualizer/dist/index.js';
-export class Visualizer {
+import { Waveform, } from '../../../../../dist/index.js';
+export class VisualizerExample {
+    waveform;
     constructor(visualizerOptions) {
         const customLayoutOptions = {
             waveBackgroundColorHex: 'fff',
@@ -22,4 +23,4 @@ export class Visualizer {
         this.waveform.draw(playingProgress);
     }
 }
-//# sourceMappingURL=Visualizer.js.map
+//# sourceMappingURL=visualizer.js.map

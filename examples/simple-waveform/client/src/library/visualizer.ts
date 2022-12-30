@@ -3,19 +3,17 @@ import {
     IWaveLayoutOptions,
     ICoreOptions,
     IWaveformClickCallback,
-//} from '../../../../../dist/index.js';
-} from '../../node_modules/waveform-visualizer/dist/index.js';
-
+} from '../../../../../dist/index.js'
 
 export interface IVisualizerOptions {
     waveformData: number[]
-    canvasElementId: string;
+    canvasElementId: string
     waveformClickCallback: IWaveformClickCallback
 }
 
-export class Visualizer {
+export class VisualizerExample {
 
-    protected waveform: Waveform;
+    protected waveform: Waveform
 
     constructor(visualizerOptions: IVisualizerOptions) {
 
@@ -23,30 +21,30 @@ export class Visualizer {
             waveBackgroundColorHex: 'fff',
             peakTopColorHex: 'ff00e3',
             peakBottomColorHex: 'c900ff',
-        };
+        }
 
-        const waveLayoutOptions = Object.assign(Waveform.layoutOptions, customLayoutOptions);
+        const waveLayoutOptions = Object.assign(Waveform.layoutOptions, customLayoutOptions)
 
         const waveformOptions: ICoreOptions = {
             layout: waveLayoutOptions,
             // tslint:disable-next-line
             data: visualizerOptions.waveformData,
             waveformClickCallback: visualizerOptions.waveformClickCallback,
-        };
+        }
 
-        const waveform = new Waveform(waveformOptions);
+        const waveform = new Waveform(waveformOptions)
 
-        const canvasElement = document.getElementById(visualizerOptions.canvasElementId) as HTMLCanvasElement;
+        const canvasElement = document.getElementById(visualizerOptions.canvasElementId) as HTMLCanvasElement
 
-        waveform.setCanvasElement(canvasElement);
+        waveform.setCanvasElement(canvasElement)
 
-        this.waveform = waveform;
+        this.waveform = waveform
 
     }
 
     public draw(playingProgress: number): void {
 
-        this.waveform.draw(playingProgress);
+        this.waveform.draw(playingProgress)
 
     }
 

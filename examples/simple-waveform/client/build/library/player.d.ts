@@ -4,9 +4,9 @@ export interface IListenersOptions {
     stopButtonElementId: string;
     volumeSliderId: string;
 }
-export declare type onPlaylingCallbackType = (playingProgress: number, maximumValue: number, currentValue: number) => void;
-export declare type onStoppedCallbackType = (playTimeOffset: number) => void;
-export declare class Player {
+export type onPlaylingCallbackType = (playingProgress: number, maximumValue: number, currentValue: number) => void;
+export type onStoppedCallbackType = (playTimeOffset: number) => void;
+export declare class PlayerExample {
     protected player: PlayerCore;
     protected playerAudioContext: AudioContext;
     protected isPlayOrPause: string;

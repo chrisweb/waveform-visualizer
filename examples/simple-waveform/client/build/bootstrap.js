@@ -1,6 +1,6 @@
-import { Player } from './library/player.js';
-import { Visualizer } from './library/Visualizer.js';
-const player = new Player();
+import { PlayerExample } from './library/player.js';
+import { VisualizerExample } from './library/visualizer.js';
+const player = new PlayerExample();
 const listenerOptions = {
     playPauseButtonElementId: 'js-play-pause-button',
     stopButtonElementId: 'js-stop-button',
@@ -30,6 +30,6 @@ const visualizerOptions = {
     canvasElementId: 'waveformCanvas',
     waveformClickCallback: waveformClickCallback,
 };
-const visualizer = new Visualizer(visualizerOptions);
+const visualizer = new VisualizerExample(visualizerOptions);
 visualizer.draw(0);
 //# sourceMappingURL=bootstrap.js.map

@@ -10,6 +10,12 @@ Visualizes waveform data (peaks), for example the ones that got generated using:
 
 Waveform created using data that got generated using the [waveform data generator](https://github.com/chrisweb/waveform-data-generator)
 
+## installation
+
+if you want to use the waveform visualizer in your own project you can install it from npm using the following command:
+
+`npm i waveform-visualizer`
+
 ## examples
 
 Check out the [simple waveform example](/examples/simple-waveform/README.md)
@@ -52,7 +58,7 @@ to lint the typescript files
 
 ## changelog
 
-3.0.0 removed UMD support, this and future versions will be ESM only
+3.0.0 updated dependencies and removed UMD support, this and future versions will be ESM only
 
 ## contributing (help / PRs appreciated 😊)
 

@@ -1,38 +1,38 @@
 {
-  "name": "waveform-visualizer_example_simple-waveform_server",
-  "version": "2.0.2",
-  "description": "(audio) waveform visualizer example simple waveform server",
-  "keywords": [
-    "canvas",
-    "javascript",
-    "visualizer",
-    "waveform"
-  ],
-  "homepage": "https://github.com/chrisweb/waveform-visualizer#readme",
-  "bugs": {
-    "url": "https://github.com/chrisweb/waveform-visualizer/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chrisweb/waveform-visualizer.git"
-  },
-  "license": "MIT",
-  "author": "chrisweb <chris963@gmail.com> (https://chris.lu)",
-  "main": "build/bootstrap.js",
-  "scripts": {
-    "build": "tsc -p ./",
-    "build:debug": "tsc -p ./ --listFiles --traceResolution",
-    "debug": "node --experimental-modules --es-module-specifier-resolution=node --nolazy --inspect-brk=9229 ./build/bootstrap",
-    "start": "node --experimental-modules --es-module-specifier-resolution=node ./build/bootstrap",
-    "watch": "tsc -p ./ -w"
-  },
-  "dependencies": {
-    "express": "4.17.1"
-  },
-  "devDependencies": {
-    "@types/express": "4.17.8",
-    "@types/node": "14.11.1",
-    "typescript": "4.0.3"
-  },
-  "type": "module"
+    "name": "waveform-visualizer_example_simple-waveform_server",
+    "version": "2.0.2",
+    "description": "(audio) waveform visualizer example simple waveform server",
+    "keywords": [
+        "canvas",
+        "javascript",
+        "visualizer",
+        "waveform"
+    ],
+    "homepage": "https://github.com/chrisweb/waveform-visualizer#readme",
+    "bugs": {
+        "url": "https://github.com/chrisweb/waveform-visualizer/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chrisweb/waveform-visualizer.git"
+    },
+    "license": "MIT",
+    "author": "chrisweb <chris963@gmail.com> (https://chris.lu)",
+    "main": "build/bootstrap.js",
+    "scripts": {
+        "build": "tsc -p ./",
+        "build:debug": "tsc -p ./ --listFiles --traceResolution",
+        "debug": "node --experimental-modules --es-module-specifier-resolution=node --nolazy --inspect-brk=9229 ./build/bootstrap",
+        "start": "node --experimental-modules --es-module-specifier-resolution=node ./build/bootstrap",
+        "watch": "tsc -p ./ -w"
+    },
+    "dependencies": {
+        "express": "4.18.2"
+    },
+    "devDependencies": {
+        "@types/express": "4.17.8",
+        "@types/node": "18.11.18",
+        "typescript": "4.9.4"
+    },
+    "type": "module"
 }
