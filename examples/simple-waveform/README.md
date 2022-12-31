@@ -87,10 +87,10 @@ open the project in your browser:
 * click into the waveform to change the song position
 * you can adjust the volume using the volume bar at the bottom
 
-check out the /client source code, especially /client/library/visualizer.ts to get an idea of how you can use the visualizer in your own projects  
+check out the `/waveform-visualizer/examples/simple-waveform/client/src/` source code, especially `/client/src/library/visualizer.ts` to get an idea of how you can use the visualizer in your own projects  
 
-* the audio player I used for the demo, is another of my projects and is available on npm too: https://www.npmjs.com/package/web-audio-api-player
-* the waveform data for the song was generated using another of my projects, the "waveform data generator" and the source code to build create your own data can be found on github: https://github.com/chrisweb/waveform-data-generator
+* the audio player I used for the demo, is another of my projects and is available on npm too: <https://www.npmjs.com/package/web-audio-api-player>
+* the waveform data for the song was generated using another of my projects, the "waveform data generator" and the source code to build create your own data can be found on github: <https://github.com/chrisweb/waveform-data-generator>
 
 ## linting
 
