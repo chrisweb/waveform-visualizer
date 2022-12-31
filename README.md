@@ -1,6 +1,6 @@
-[![npm version](https://img.shields.io/npm/v/waveform-visualizer.svg?style=flat)](https://www.npmjs.com/package/waveform-visualizer)
-[![minified size](https://img.shields.io/bundlephobia/min/waveform-visualizer?style=flat)](https://www.npmjs.com/package/waveform-visualizer)
-[![GitHub license](https://img.shields.io/github/license/chrisweb/waveform-visualizer)](https://github.com/chrisweb/waveform-visualizer/blob/master/LICENSE)
+[![waveform-visualizer npm version](https://img.shields.io/npm/v/waveform-visualizer.svg?style=flat)](https://www.npmjs.com/package/waveform-visualizer)
+[![waveform-visualizer minified size](https://img.shields.io/bundlephobia/min/waveform-visualizer?style=flat)](https://www.npmjs.com/package/waveform-visualizer)
+[![waveform-visualizer license](https://img.shields.io/github/license/chrisweb/waveform-visualizer)](https://github.com/chrisweb/waveform-visualizer/blob/master/LICENSE)
 
 # waveform-visualizer
 
