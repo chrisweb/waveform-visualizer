@@ -95,3 +95,31 @@ check out the `/waveform-visualizer/examples/simple-waveform/client/src/` source
 ## linting
 
 the linting is now done via the npm run lint command of the main project
+
+## express types bug
+
+when using the express types, you will get an error at build time, that says:
+
+> Namespace 'serveStatic' has no exported member 'RequestHandlerConstructor'
+
+to fix this I added two new sections to the example server package.json:
+
+the first one is for npm:
+
+```json
+    "overrides": {
+        "@types/serve-static": "1.15.1"
+    },
+```
+
+the second one is for yarn:
+
+```json
+    "resolutions": {
+        "@types/serve-static": "1.15.1"
+    },
+```
+
+both will override the express static types used by the express types
+
+as of now the related ticket on github has no PR and the problem is not solved: [DefinitelyTyped issues: #49595](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/49595), when this gets fixed, we will be able to remove the two sections of the package.json that do an override of the server static types version

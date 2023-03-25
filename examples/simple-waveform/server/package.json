@@ -31,8 +31,14 @@
     },
     "devDependencies": {
         "@types/express": "4.17.17",
-        "@types/node": "18.15.3",
+        "@types/node": "18.15.9",
         "typescript": "5.0.2"
+    },
+    "overrides": {
+        "@types/serve-static": "1.15.1"
+    },
+    "resolutions": {
+        "@types/serve-static": "1.15.1"
     },
     "type": "module"
 }
