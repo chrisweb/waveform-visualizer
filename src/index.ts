@@ -1,2 +1,2 @@
-export { Waveform, ICoreOptions, IWaveLayoutOptions, IWaveformClickCallback } from './library/core';
+export { Waveform, IWaveCoreOptions, IWaveLayoutOptions, IWaveClickCallback } from './library/core';
 

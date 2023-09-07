@@ -12,32 +12,33 @@ var Canvas = /** @class */ (function () {
 }());
 
 var Waveform = /** @class */ (function () {
-    function Waveform(waveformOptions) {
+    function Waveform(waveCoreOptions) {
+        this._waveLayoutOptions = Waveform.layoutOptions;
         this._firstDrawing = true;
         this._plugins = [];
-        this._waveformClickCallback = null;
-        if (waveformOptions !== undefined) {
-            if (waveformOptions.canvasContext !== undefined) {
-                this.setCanvasContext(waveformOptions.canvasContext);
+        this._waveClickCallback = null;
+        if (waveCoreOptions !== undefined) {
+            if (waveCoreOptions.canvasContext !== undefined) {
+                this.setCanvasContext(waveCoreOptions.canvasContext);
             }
-            if (waveformOptions.canvasElement !== undefined) {
-                this.setCanvasElement(waveformOptions.canvasElement);
+            if (waveCoreOptions.canvasElement !== undefined) {
+                this.setCanvasElement(waveCoreOptions.canvasElement);
             }
-            if (waveformOptions.data !== undefined) {
-                this.setWaveData(waveformOptions.data);
+            if (waveCoreOptions.data !== undefined) {
+                this.setWaveData(waveCoreOptions.data);
             }
-            if (waveformOptions.layout !== undefined) {
-                this.setLayoutOptions(waveformOptions.layout);
+            if (waveCoreOptions.layout !== undefined) {
+                this.setLayoutOptions(waveCoreOptions.layout);
             }
-            if (waveformOptions.waveformClickCallback !== undefined) {
-                this.setWaveformClickCallback(waveformOptions.waveformClickCallback);
+            if (waveCoreOptions.waveformClickCallback !== undefined) {
+                this.setWaveformClickCallback(waveCoreOptions.waveformClickCallback);
             }
         }
     }
     Waveform.prototype.setCanvasContext = function (canvasContext) {
         this._canvasContext = canvasContext;
         this._canvasElement = this._canvasContext.canvas;
-        this._activateClickListener();
+        this._addClickWaveListener();
     };
     Waveform.prototype.getCanvasContext = function () {
         return this._canvasContext;
@@ -45,14 +46,8 @@ var Waveform = /** @class */ (function () {
     Waveform.prototype.setCanvasElement = function (canvasElement) {
         this._canvasElement = canvasElement;
         var canvas = new Canvas();
-        try {
-            this._canvasContext = canvas.getContext(canvasElement);
-        }
-        catch (error) {
-            // TODO: handle error properly
-            console.log(error);
-        }
-        this._activateClickListener();
+        this._canvasContext = canvas.getContext(canvasElement);
+        this._addClickWaveListener();
     };
     Waveform.prototype.getCanvasElement = function () {
         return this._canvasElement;
@@ -64,29 +59,36 @@ var Waveform = /** @class */ (function () {
         return this._waveData;
     };
     Waveform.prototype.setLayoutOptions = function (layout) {
-        var waveLayoutOptions = Object.assign(Waveform.layoutOptions, layout);
-        this._waveLayoutOptions = waveLayoutOptions;
+        console.log('setLayoutOptions');
+        console.log('layout: ', layout);
+        console.log('Waveform.layoutOptions: ', Waveform.layoutOptions);
+        Object.assign(this._waveLayoutOptions, layout);
+        console.log('this._waveLayoutOptions: ', this._waveLayoutOptions);
     };
     Waveform.prototype.getLayoutOptions = function () {
         return this._waveLayoutOptions;
     };
     Waveform.prototype.setWaveformClickCallback = function (waveformClickCallback) {
-        this._waveformClickCallback = waveformClickCallback;
+        this._waveClickCallback = waveformClickCallback;
     };
     Waveform.prototype.getWaveformClickCallback = function () {
-        return this._waveformClickCallback;
+        return this._waveClickCallback;
     };
-    Waveform.prototype._activateClickListener = function () {
+    Waveform.prototype._addClickWaveListener = function () {
         var _this = this;
         this._canvasElement.addEventListener('click', function (event) { _this._canvasElementClick(event); });
     };
+    Waveform.prototype._removeClickWaveListener = function () {
+        var _this = this;
+        this._canvasElement.removeEventListener('click', function (event) { _this._canvasElementClick(event); });
+    };
     Waveform.prototype._canvasElementClick = function (event) {
-        event.preventDefault();
-        var canvasHorizontalPositionInPixel = this._getMouseHorizontalPosition(event);
-        var pixelsPerPercent = this._canvasElement.width / 100;
-        var clickHorizontalPositionInPercent = canvasHorizontalPositionInPixel / pixelsPerPercent;
-        if (this._waveformClickCallback !== null) {
-            this._waveformClickCallback(clickHorizontalPositionInPercent);
+        if (this._waveClickCallback !== null) {
+            event.preventDefault();
+            var canvasHorizontalPositionInPixel = this._getMouseHorizontalPosition(event);
+            var pixelsPerPercent = this._canvasElement.width / 100;
+            var clickHorizontalPositionInPercent = canvasHorizontalPositionInPixel / pixelsPerPercent;
+            this._waveClickCallback(clickHorizontalPositionInPercent);
         }
     };
     Waveform.prototype._getMouseHorizontalPosition = function (event) {
@@ -126,20 +128,20 @@ var Waveform = /** @class */ (function () {
         var topPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel * (this._waveLayoutOptions.waveTopPercentage / 100);
         // the max height of the bottom peaks
         var bottomPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel * ((100 - this._waveLayoutOptions.waveTopPercentage) / 100);
-        // canvas background color
-        this._canvasContext.fillStyle = '#' + this._waveLayoutOptions.waveBackgroundColorHex;
+        // canvas background fill style
+        this._canvasContext.fillStyle = this._waveLayoutOptions.waveBackgroundFillStyle;
         this._canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
         var i;
         for (i = 0; i < peaksLength; i++) {
-            var topStrokeColor = void 0;
-            var bottomStrokeColor = void 0;
+            var topStrokeFillStyle = void 0;
+            var bottomStrokeFillStyle = void 0;
             if (i < peaksRange) {
-                topStrokeColor = '#' + this._waveLayoutOptions.peakTopProgressColorHex;
-                bottomStrokeColor = '#' + this._waveLayoutOptions.peakBottomProgressColorHex;
+                topStrokeFillStyle = this._waveLayoutOptions.peakTopProgressFillStyle;
+                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomProgressFillStyle;
             }
             else {
-                topStrokeColor = '#' + this._waveLayoutOptions.peakTopColorHex;
-                bottomStrokeColor = '#' + this._waveLayoutOptions.peakBottomColorHex;
+                topStrokeFillStyle = this._waveLayoutOptions.peakTopFillStyle;
+                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomFillStyle;
             }
             var peakHeightInPercent = this._waveData[i];
             // the horizontal position of a peak
@@ -148,26 +150,26 @@ var Waveform = /** @class */ (function () {
             this._canvasContext.beginPath();
             this._canvasContext.moveTo(peakHorizontalPosition, topPeakMaxHeightInPixel);
             this._canvasContext.lineTo(peakHorizontalPosition, topPeakMaxHeightInPixel - (topPeakMaxHeightInPixel * (peakHeightInPercent / 100)));
-            this._canvasContext.strokeStyle = topStrokeColor;
+            this._canvasContext.strokeStyle = topStrokeFillStyle;
             this._canvasContext.stroke();
             // waveform bottom
             this._canvasContext.beginPath();
             this._canvasContext.moveTo(peakHorizontalPosition, topPeakMaxHeightInPixel);
             this._canvasContext.lineTo(peakHorizontalPosition, topPeakMaxHeightInPixel + (bottomPeakMaxHeightInPixel * (peakHeightInPercent / 100)));
-            this._canvasContext.strokeStyle = bottomStrokeColor;
+            this._canvasContext.strokeStyle = bottomStrokeFillStyle;
             this._canvasContext.stroke();
         }
     };
     Waveform.layoutOptions = {
-        waveHeightInPixel: 200,
-        waveBackgroundColorHex: '000000',
+        waveHeightInPixel: 100,
+        waveBackgroundFillStyle: 'transparent',
         peakWidthInPixel: 2,
         spaceWidthInPixel: 1,
         waveTopPercentage: 70,
-        peakTopColorHex: 'f222ff',
-        peakBottomColorHex: 'ff2975',
-        peakTopProgressColorHex: 'ffd319',
-        peakBottomProgressColorHex: 'ff901f'
+        peakTopFillStyle: '#f222ff',
+        peakBottomFillStyle: '#ff2975',
+        peakTopProgressFillStyle: '#ffd319',
+        peakBottomProgressFillStyle: '#ff901f'
     };
     return Waveform;
 }());

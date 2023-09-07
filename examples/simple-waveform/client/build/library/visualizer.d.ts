@@ -1,8 +1,8 @@
-import { Waveform, IWaveformClickCallback } from '../../../../../dist/index.js';
+import { Waveform, IWaveClickCallback } from '../../../../../dist/index.js';
 export interface IVisualizerOptions {
     waveformData: number[];
     canvasElementId: string;
-    waveformClickCallback: IWaveformClickCallback;
+    waveformClickCallback: IWaveClickCallback;
 }
 export declare class VisualizerExample {
     protected waveform: Waveform;

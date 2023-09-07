@@ -1,22 +1,22 @@
-export interface ICoreOptions {
+export interface IWaveCoreOptions {
     canvasContext?: CanvasRenderingContext2D;
     canvasElement?: HTMLCanvasElement;
     data?: number[];
     layout?: IWaveLayoutOptions;
-    waveformClickCallback?: IWaveformClickCallback;
+    waveformClickCallback?: IWaveClickCallback;
 }
 export interface IWaveLayoutOptions {
     readonly waveHeightInPixel?: number;
-    readonly waveBackgroundColorHex?: string;
+    readonly waveBackgroundFillStyle?: string | CanvasGradient | CanvasPattern;
     readonly peakWidthInPixel?: number;
     readonly spaceWidthInPixel?: number;
     readonly waveTopPercentage?: number;
-    readonly peakTopColorHex?: string;
-    readonly peakBottomColorHex?: string;
-    readonly peakTopProgressColorHex?: string;
-    readonly peakBottomProgressColorHex?: string;
+    readonly peakTopFillStyle?: string | CanvasGradient | CanvasPattern;
+    readonly peakBottomFillStyle?: string | CanvasGradient | CanvasPattern;
+    readonly peakTopProgressFillStyle?: string | CanvasGradient | CanvasPattern;
+    readonly peakBottomProgressFillStyle?: string | CanvasGradient | CanvasPattern;
 }
-export interface IWaveformClickCallback {
+export interface IWaveClickCallback {
     (clickHorizontalPositionInPercent: number): void;
 }
 export declare class Waveform {
@@ -28,8 +28,8 @@ export declare class Waveform {
     protected _firstDrawing: boolean;
     protected _latestRange: number;
     protected _plugins: [];
-    protected _waveformClickCallback: IWaveformClickCallback | null;
-    constructor(waveformOptions?: ICoreOptions);
+    protected _waveClickCallback: IWaveClickCallback | null;
+    constructor(waveCoreOptions?: IWaveCoreOptions);
     setCanvasContext(canvasContext: CanvasRenderingContext2D): void;
     getCanvasContext(): CanvasRenderingContext2D;
     setCanvasElement(canvasElement: HTMLCanvasElement): void;
@@ -38,9 +38,10 @@ export declare class Waveform {
     getWaveData(): number[];
     setLayoutOptions(layout: IWaveLayoutOptions): void;
     getLayoutOptions(): IWaveLayoutOptions;
-    setWaveformClickCallback(waveformClickCallback: IWaveformClickCallback): void;
-    getWaveformClickCallback(): IWaveformClickCallback;
-    protected _activateClickListener(): void;
+    setWaveformClickCallback(waveformClickCallback: IWaveClickCallback): void;
+    getWaveformClickCallback(): IWaveClickCallback;
+    protected _addClickWaveListener(): void;
+    protected _removeClickWaveListener(): void;
     protected _canvasElementClick(event: MouseEvent): void;
     protected _getMouseHorizontalPosition(event: MouseEvent): number;
     /**

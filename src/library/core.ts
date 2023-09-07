@@ -1,103 +1,72 @@
 import { Canvas } from './canvas';
 
-export interface ICoreOptions {
-    canvasContext?: CanvasRenderingContext2D;
+export interface IWaveCoreOptions {
     canvasElement?: HTMLCanvasElement;
     data?: number[];
     layout?: IWaveLayoutOptions;
-    waveformClickCallback?: IWaveformClickCallback;
+    waveformClickCallback?: IWaveClickCallback;
 }
 
 export interface IWaveLayoutOptions {
     readonly waveHeightInPixel?: number;
-    readonly waveBackgroundColorHex?: string;
+    readonly waveBackgroundFillStyle?: string | CanvasGradient | CanvasPattern;
     readonly peakWidthInPixel?: number;
     readonly spaceWidthInPixel?: number;
     readonly waveTopPercentage?: number;
-    readonly peakTopColorHex?: string;
-    readonly peakBottomColorHex?: string;
-    readonly peakTopProgressColorHex?: string;
-    readonly peakBottomProgressColorHex?: string;
+    readonly peakTopFillStyle?: string | CanvasGradient | CanvasPattern;
+    readonly peakBottomFillStyle?: string | CanvasGradient | CanvasPattern;
+    readonly peakTopProgressFillStyle?: string | CanvasGradient | CanvasPattern;
+    readonly peakBottomProgressFillStyle?: string | CanvasGradient | CanvasPattern;
 }
 
-export interface IWaveformClickCallback {
+export interface IWaveClickCallback {
     (clickHorizontalPositionInPercent: number): void;
 }
 
 export class Waveform {
 
     static layoutOptions: IWaveLayoutOptions = {
-        waveHeightInPixel: 200,
-        waveBackgroundColorHex: '000000',
+        waveHeightInPixel: 100,
+        waveBackgroundFillStyle: 'transparent',
         peakWidthInPixel: 2,
         spaceWidthInPixel: 1,
-        waveTopPercentage: 70,
-        peakTopColorHex: 'f222ff',
-        peakBottomColorHex: 'ff2975',
-        peakTopProgressColorHex : 'ffd319',
-        peakBottomProgressColorHex: 'ff901f'
+        waveTopPercentage: 50,
+        peakTopFillStyle: '#f222ff',
+        peakBottomFillStyle: '#ff2975',
+        peakTopProgressFillStyle: '#ffd319',
+        peakBottomProgressFillStyle: '#ff901f'
     };
 
     protected _canvasContext: CanvasRenderingContext2D;
     protected _canvasElement: HTMLCanvasElement;
     protected _waveData: number[];
-    protected _waveLayoutOptions: IWaveLayoutOptions;
+    protected _waveLayoutOptions: IWaveLayoutOptions = Waveform.layoutOptions;
     protected _firstDrawing = true;
     protected _latestRange: number;
     protected _plugins: [] = [];
-    protected _waveformClickCallback: IWaveformClickCallback | null = null;
+    protected _waveClickCallback: IWaveClickCallback | null = null;
 
-    constructor(waveformOptions?: ICoreOptions) {
+    constructor(waveCoreOptions?: IWaveCoreOptions) {
 
-        if (waveformOptions !== undefined) {
+        if (waveCoreOptions !== undefined) {
 
-            if (waveformOptions.canvasContext !== undefined) {
-
-                this.setCanvasContext(waveformOptions.canvasContext);
-
+            if (waveCoreOptions.canvasElement !== undefined) {
+                this.setCanvasElement(waveCoreOptions.canvasElement);
             }
 
-            if (waveformOptions.canvasElement !== undefined) {
-
-                this.setCanvasElement(waveformOptions.canvasElement);
-
+            if (waveCoreOptions.data !== undefined) {
+                this.setWaveData(waveCoreOptions.data);
             }
 
-            if (waveformOptions.data !== undefined) {
-
-                this.setWaveData(waveformOptions.data);
-
+            if (waveCoreOptions.layout !== undefined) {
+                this.setLayoutOptions(waveCoreOptions.layout);
             }
 
-            if (waveformOptions.layout !== undefined) {
-
-                this.setLayoutOptions(waveformOptions.layout);
-
-            }
-
-            if (waveformOptions.waveformClickCallback !== undefined) {
-
-                this.setWaveformClickCallback(waveformOptions.waveformClickCallback);
-
+            if (waveCoreOptions.waveformClickCallback !== undefined) {
+                this.setWaveformClickCallback(waveCoreOptions.waveformClickCallback);
             }
 
         }
-
-    }
-
-    public setCanvasContext(canvasContext: CanvasRenderingContext2D): void {
-
-        this._canvasContext = canvasContext;
-
-        this._canvasElement = this._canvasContext.canvas;
-
-        this._activateClickListener();
-
-    }
-
-    public getCanvasContext(): CanvasRenderingContext2D {
-
-        return this._canvasContext;
 
     }
 
@@ -107,14 +76,9 @@ export class Waveform {
 
         const canvas = new Canvas();
 
-        try {
-            this._canvasContext = canvas.getContext(canvasElement);
-        } catch (error) {
-            // TODO: handle error properly
-            console.log(error);
-        }
+        this._canvasContext = canvas.getContext(canvasElement);
 
-        this._activateClickListener();
+        this._addClickWaveListener();
 
     }
 
@@ -138,9 +102,7 @@ export class Waveform {
 
     public setLayoutOptions(layout: IWaveLayoutOptions): void {
 
-        const waveLayoutOptions = Object.assign(Waveform.layoutOptions, layout);
-
-        this._waveLayoutOptions = waveLayoutOptions;
+        Object.assign(this._waveLayoutOptions, layout);
 
     }
 
@@ -150,36 +112,42 @@ export class Waveform {
 
     }
 
-    public setWaveformClickCallback(waveformClickCallback: IWaveformClickCallback): void {
+    public setWaveformClickCallback(waveformClickCallback: IWaveClickCallback): void {
 
-        this._waveformClickCallback = waveformClickCallback;
-
-    }
-
-    public getWaveformClickCallback(): IWaveformClickCallback {
-
-        return this._waveformClickCallback;
+        this._waveClickCallback = waveformClickCallback;
 
     }
 
-    protected _activateClickListener(): void {
+    public getWaveformClickCallback(): IWaveClickCallback {
+
+        return this._waveClickCallback;
+
+    }
+
+    protected _addClickWaveListener(): void {
 
         this._canvasElement.addEventListener('click', (event: MouseEvent) => { this._canvasElementClick(event) });
 
     }
 
+    protected _removeClickWaveListener(): void {
+
+        this._canvasElement.removeEventListener('click', (event: MouseEvent) => { this._canvasElementClick(event) });
+
+    }
+
     protected _canvasElementClick(event: MouseEvent): void {
 
-        event.preventDefault();
+        if (this._waveClickCallback !== null) {
 
-        const canvasHorizontalPositionInPixel = this._getMouseHorizontalPosition(event);
+            event.preventDefault();
 
-        const pixelsPerPercent = this._canvasElement.width / 100;
+            const canvasHorizontalPositionInPixel = this._getMouseHorizontalPosition(event);
+            const pixelsPerPercent = this._canvasElement.width / 100;
+            const clickHorizontalPositionInPercent = canvasHorizontalPositionInPixel / pixelsPerPercent;
 
-        const clickHorizontalPositionInPercent = canvasHorizontalPositionInPixel / pixelsPerPercent;
+            this._waveClickCallback(clickHorizontalPositionInPercent);
 
-        if (this._waveformClickCallback !== null) {
-            this._waveformClickCallback(clickHorizontalPositionInPercent);
         }
 
     }
@@ -187,13 +155,12 @@ export class Waveform {
     protected _getMouseHorizontalPosition(event: MouseEvent): number {
 
         const boundingClientRectangle = this._canvasElement.getBoundingClientRect();
-
         const position = event.clientX - boundingClientRectangle.left;
 
         return position;
 
     }
-    
+
     /**
      * 
      * @param range 
@@ -240,28 +207,28 @@ export class Waveform {
         const topPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel * (this._waveLayoutOptions.waveTopPercentage / 100);
 
         // the max height of the bottom peaks
-        const bottomPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel  * ((100 - this._waveLayoutOptions.waveTopPercentage) / 100);
+        const bottomPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel * ((100 - this._waveLayoutOptions.waveTopPercentage) / 100);
 
-        // canvas background color
-        this._canvasContext.fillStyle = '#' + this._waveLayoutOptions.waveBackgroundColorHex;
+        // canvas background fill style
+        this._canvasContext.fillStyle = this._waveLayoutOptions.waveBackgroundFillStyle;
         this._canvasContext.fillRect(0, 0, canvasWidth, canvasHeight);
 
         let i;
 
         for (i = 0; i < peaksLength; i++) {
 
-            let topStrokeColor;
-            let bottomStrokeColor;
+            let topStrokeFillStyle;
+            let bottomStrokeFillStyle;
 
             if (i < peaksRange) {
 
-                topStrokeColor = '#' + this._waveLayoutOptions.peakTopProgressColorHex;
-                bottomStrokeColor = '#' + this._waveLayoutOptions.peakBottomProgressColorHex;
+                topStrokeFillStyle = this._waveLayoutOptions.peakTopProgressFillStyle;
+                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomProgressFillStyle;
 
             } else {
 
-                topStrokeColor = '#' + this._waveLayoutOptions.peakTopColorHex;
-                bottomStrokeColor = '#' + this._waveLayoutOptions.peakBottomColorHex;
+                topStrokeFillStyle = this._waveLayoutOptions.peakTopFillStyle;
+                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomFillStyle;
 
             }
 
@@ -274,14 +241,14 @@ export class Waveform {
             this._canvasContext.beginPath();
             this._canvasContext.moveTo(peakHorizontalPosition, topPeakMaxHeightInPixel);
             this._canvasContext.lineTo(peakHorizontalPosition, topPeakMaxHeightInPixel - (topPeakMaxHeightInPixel * (peakHeightInPercent / 100)));
-            this._canvasContext.strokeStyle = topStrokeColor;
+            this._canvasContext.strokeStyle = topStrokeFillStyle;
             this._canvasContext.stroke();
 
             // waveform bottom
             this._canvasContext.beginPath();
             this._canvasContext.moveTo(peakHorizontalPosition, topPeakMaxHeightInPixel);
             this._canvasContext.lineTo(peakHorizontalPosition, topPeakMaxHeightInPixel + (bottomPeakMaxHeightInPixel * (peakHeightInPercent / 100)));
-            this._canvasContext.strokeStyle = bottomStrokeColor;
+            this._canvasContext.strokeStyle = bottomStrokeFillStyle;
             this._canvasContext.stroke();
 
         }
