@@ -286,8 +286,7 @@ to lint the typescript files
 
 ## changelog
 
-* 3.0.1 eslint-plugin-import dependency update, to fix JSON5 related [CVE-2022-46175](https://github.com/advisories/GHSA-9c47-m6qq-7p4h)
-* 3.0.0 updated dependencies and removed UMD support, this and future versions will be ESM only
+See [github releases page](https://github.com/chrisweb/waveform-visualizer/releases)
 
 ## contributing (help / PRs appreciated 😊)
 
