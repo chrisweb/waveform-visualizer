@@ -153,6 +153,12 @@ const playerPlayingProgressCallback = (progressInPercent) => {
 
 To see an example of what it looks like when the range gets modified, check out the animated gif on top of this README or install the example from this repository, which uses an audio player that redraws the waveform element every time its progress callback gets triggered: [simple waveform and audio player example](/examples/simple-waveform/README.md)
 
+If you want to replace the current waveform display with another waveform because your audio player got told to play the next song, then you don't need to create another waveform, just replace the wave peaks from the previous song with the peaks of the current song,like so:
+
+```ts
+waveform.setWaveData(peaksArray)
+```
+
 ### React component example
 
 Note: This code does the exact same thing as the previous example but uses React instead of vanilla javascript
@@ -166,14 +172,24 @@ import { Waveform, IWaveLayoutOptions, IWaveCoreOptions } from 'waveform-visuali
 const WaveformComponent = () => {
 
     const canvasRef = useRef<HTMLCanvasElement>()
+    const waveformRef = useRef<Waveform | null>(null)
 
     const onWaveClickHandler = useCallback((clickHorizontalPositionInPercent: number): void => {
 
         console.log('waveformClickCallback: ', clickHorizontalPositionInPercent)
 
-        // tell the audio player to move to 50% of the sound
+        // tell your audio player to move to 50% of the sound
+        // if you need an audio player checkout my other project:
+        // https://github.com/chrisweb/web-audio-api-player
+        //playerRef.current.goToPosition(clickHorizontalPositionInPercent)
 
     }, [])
+
+    // here is some pseudo code to show you what to when another sound (song) gets played
+    //playerRef.current.onPlayCallback((sound) => {
+    //    const peaksArray = sound.waveData
+    //    waveformRef.current.setWaveData(peaksArray)
+    //})
 
     const initializeWaveform = useCallback(() => {
 
@@ -191,6 +207,8 @@ const WaveformComponent = () => {
 
         const waveform = new Waveform(waveCoreOptions)
 
+        waveformRef.current = waveform
+
         waveform.setCanvasElement(canvasRef.current)
 
         waveform.draw(0)
@@ -199,6 +217,13 @@ const WaveformComponent = () => {
 
     useEffect(() => {
         initializeWaveform()
+        return () => {
+            if (waveformRef.current !== null) {
+                // on component umount, destroy the waveform
+                // the waveform will remove the click event listener
+                waveformRef.current.destroy()
+            }
+        }
     }, [initializeWaveform])
 
     return (
