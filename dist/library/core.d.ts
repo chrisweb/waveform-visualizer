@@ -1,5 +1,4 @@
 export interface IWaveCoreOptions {
-    canvasContext?: CanvasRenderingContext2D;
     canvasElement?: HTMLCanvasElement;
     data?: number[];
     layout?: IWaveLayoutOptions;
@@ -30,8 +29,6 @@ export declare class Waveform {
     protected _plugins: [];
     protected _waveClickCallback: IWaveClickCallback | null;
     constructor(waveCoreOptions?: IWaveCoreOptions);
-    setCanvasContext(canvasContext: CanvasRenderingContext2D): void;
-    getCanvasContext(): CanvasRenderingContext2D;
     setCanvasElement(canvasElement: HTMLCanvasElement): void;
     getCanvasElement(): HTMLCanvasElement;
     setWaveData(data: number[]): void;
@@ -49,4 +46,5 @@ export declare class Waveform {
      * @param range
      */
     draw(range?: number): void;
+    destroy(): void;
 }

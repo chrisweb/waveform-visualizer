@@ -18,9 +18,6 @@ var Waveform = /** @class */ (function () {
         this._plugins = [];
         this._waveClickCallback = null;
         if (waveCoreOptions !== undefined) {
-            if (waveCoreOptions.canvasContext !== undefined) {
-                this.setCanvasContext(waveCoreOptions.canvasContext);
-            }
             if (waveCoreOptions.canvasElement !== undefined) {
                 this.setCanvasElement(waveCoreOptions.canvasElement);
             }
@@ -35,14 +32,6 @@ var Waveform = /** @class */ (function () {
             }
         }
     }
-    Waveform.prototype.setCanvasContext = function (canvasContext) {
-        this._canvasContext = canvasContext;
-        this._canvasElement = this._canvasContext.canvas;
-        this._addClickWaveListener();
-    };
-    Waveform.prototype.getCanvasContext = function () {
-        return this._canvasContext;
-    };
     Waveform.prototype.setCanvasElement = function (canvasElement) {
         this._canvasElement = canvasElement;
         var canvas = new Canvas();
@@ -59,11 +48,7 @@ var Waveform = /** @class */ (function () {
         return this._waveData;
     };
     Waveform.prototype.setLayoutOptions = function (layout) {
-        console.log('setLayoutOptions');
-        console.log('layout: ', layout);
-        console.log('Waveform.layoutOptions: ', Waveform.layoutOptions);
         Object.assign(this._waveLayoutOptions, layout);
-        console.log('this._waveLayoutOptions: ', this._waveLayoutOptions);
     };
     Waveform.prototype.getLayoutOptions = function () {
         return this._waveLayoutOptions;
@@ -75,12 +60,10 @@ var Waveform = /** @class */ (function () {
         return this._waveClickCallback;
     };
     Waveform.prototype._addClickWaveListener = function () {
-        var _this = this;
-        this._canvasElement.addEventListener('click', function (event) { _this._canvasElementClick(event); });
+        this._canvasElement.addEventListener('click', this._canvasElementClick);
     };
     Waveform.prototype._removeClickWaveListener = function () {
-        var _this = this;
-        this._canvasElement.removeEventListener('click', function (event) { _this._canvasElementClick(event); });
+        this._canvasElement.removeEventListener('click', this._canvasElementClick);
     };
     Waveform.prototype._canvasElementClick = function (event) {
         if (this._waveClickCallback !== null) {
@@ -160,12 +143,15 @@ var Waveform = /** @class */ (function () {
             this._canvasContext.stroke();
         }
     };
+    Waveform.prototype.destroy = function () {
+        this._removeClickWaveListener();
+    };
     Waveform.layoutOptions = {
         waveHeightInPixel: 100,
         waveBackgroundFillStyle: 'transparent',
         peakWidthInPixel: 2,
         spaceWidthInPixel: 1,
-        waveTopPercentage: 70,
+        waveTopPercentage: 50,
         peakTopFillStyle: '#f222ff',
         peakBottomFillStyle: '#ff2975',
         peakTopProgressFillStyle: '#ffd319',
