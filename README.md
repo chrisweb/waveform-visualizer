@@ -186,9 +186,17 @@ const WaveformComponent = () => {
     }, [])
 
     // here is some pseudo code to show you what to when another sound (song) gets played
+    // we replace the wave data (peaks) of the previous song with the data for the current song
     //playerRef.current.onPlayCallback((sound) => {
     //    const peaksArray = sound.waveData
     //    waveformRef.current.setWaveData(peaksArray)
+    //})
+
+    // and here is some pseudo code to show you have to change the range display
+    // when your player is playing a sound (song)
+    // the range value is the playing progress in percent, so a value between 0 and 100
+    //playerRef.current.onPlayingCallback((progressInPercent) => {
+    //    waveformRef.current.draw(progressInPercent)
     //})
 
     const initializeWaveform = useCallback(() => {
