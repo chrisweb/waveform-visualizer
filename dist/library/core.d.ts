@@ -25,7 +25,7 @@ export declare class Waveform {
     protected _waveData: number[];
     protected _waveLayoutOptions: IWaveLayoutOptions;
     protected _firstDrawing: boolean;
-    protected _latestRange: number;
+    protected _latestRange: number | null;
     protected _plugins: [];
     protected _waveClickCallback: IWaveClickCallback | null;
     constructor(waveCoreOptions?: IWaveCoreOptions);
@@ -45,6 +45,6 @@ export declare class Waveform {
      *
      * @param range
      */
-    draw(range?: number): void;
+    draw(range?: number, force?: boolean): void;
     destroy(): void;
 }

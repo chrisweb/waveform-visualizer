@@ -15,6 +15,7 @@ var Waveform = /** @class */ (function () {
     function Waveform(waveCoreOptions) {
         this._waveLayoutOptions = Waveform.layoutOptions;
         this._firstDrawing = true;
+        this._latestRange = null;
         this._plugins = [];
         this._waveClickCallback = null;
         if (waveCoreOptions !== undefined) {
@@ -42,6 +43,9 @@ var Waveform = /** @class */ (function () {
         return this._canvasElement;
     };
     Waveform.prototype.setWaveData = function (data) {
+        // reset the _latestRange to allow a new
+        // draw even if the range did not change
+        this._latestRange = null;
         this._waveData = data;
     };
     Waveform.prototype.getWaveData = function () {
@@ -83,24 +87,34 @@ var Waveform = /** @class */ (function () {
      *
      * @param range
      */
-    Waveform.prototype.draw = function (range) {
+    Waveform.prototype.draw = function (range, force) {
         // measure fps
         //this.fps();
+        if (range === void 0) { range = 0; }
+        if (force === void 0) { force = false; }
         var peaksLength = this._waveData.length;
+        if (peaksLength === 0) {
+            // nothing to draw
+            console.warn('can not draw, peaks array (waveData) is empty');
+            return;
+        }
+        if (range < 0 || range > 100) {
+            console.warn('range value must be >= 0 and <= 100');
+            return;
+        }
         // the canvas width is the width of all the peaks, plus the width of
         // all the spaces, the amount of spaces is equal to the amount of peaks
         // minus one
         var canvasWidth = (peaksLength * this._waveLayoutOptions.peakWidthInPixel) + ((peaksLength - 1) * this._waveLayoutOptions.spaceWidthInPixel);
         var peaksRange = 0;
-        if (range !== undefined) {
-            var peaksPercentage = peaksLength / 100;
-            peaksRange = Math.round(range * peaksPercentage);
-            // if the range did not change since last draw don't redraw
-            if (peaksRange === this._latestRange) {
-                return;
-            }
-            this._latestRange = peaksRange;
+        var peaksPercentage = peaksLength / 100;
+        peaksRange = Math.round(range * peaksPercentage);
+        // if the range did not change since last draw don't redraw
+        // except if force is true
+        if (peaksRange === this._latestRange && !force) {
+            return;
         }
+        this._latestRange = peaksRange;
         var canvasHeight = this._waveLayoutOptions.waveHeightInPixel;
         // canvas dimensions
         this._canvasElement.height = canvasHeight;
