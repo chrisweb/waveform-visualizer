@@ -279,7 +279,7 @@ Note: there is no option for the width of a waveform, the width will be determin
 * getLayoutOptions(): IWaveLayoutOptions, to get the current layout options
 * setWaveformClickCallback(waveformClickCallback: IWaveClickCallback): void, to add the click callback to the waveform (which will get triggered when the user clicks on the canvas of the waveform)
 * getWaveformClickCallback(): IWaveClickCallback, to get the current click callback
-* draw(range?: number): void, to tell the waveform to draw the peaks, if a range is set (must be a number between 0 and 100) the color of the peaks inside of the range percentage can get drawn using a different color to show the current playing progress of the sound (or song)
+* draw(range: number, force: boolean): void, if range is not set it will be zero by default, draw will tell the waveform to draw the peaks, range is a percentage value (it must be a number between 0 and 100) the color of the peaks inside of the range percentage can get drawn using a different color to show the current playing progress of the sound (or song), if force is set to true (default false) then the waveform will perform a redraw even if the range did not change (and wave data did not change) since last call
 * destroy(): void, tells the waveform visualizer to shutdown, which removes the click listener
 
 ## development: build
