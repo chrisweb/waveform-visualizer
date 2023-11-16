@@ -15,7 +15,7 @@ export class VisualizerExample {
         this.waveform = waveform;
         const canvasElement = document.getElementById(visualizerOptions.canvasElementId);
         waveform.setCanvasElement(canvasElement);
-        const waveCanvasContext = waveform.getCanvasContext();
+        const waveCanvasContext = waveform.getCanvasElement().getContext('2d');
         const linearGradiantTopPeaks = waveCanvasContext.createLinearGradient(0, 0, 0, 50);
         linearGradiantTopPeaks.addColorStop(0, 'yellow');
         linearGradiantTopPeaks.addColorStop(1, 'red');

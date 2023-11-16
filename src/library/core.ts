@@ -126,13 +126,13 @@ export class Waveform {
 
     protected _addClickWaveListener(): void {
 
-        this._canvasElement.addEventListener('click', (event: MouseEvent) => { this._canvasElementClick(event) });
+        this._canvasElement.addEventListener('click', this._canvasElementClick.bind(this));
 
     }
 
     protected _removeClickWaveListener(): void {
 
-        this._canvasElement.removeEventListener('click', (event: MouseEvent) => { this._canvasElementClick(event) });
+        this._canvasElement.removeEventListener('click', this._canvasElementClick.bind(this));
 
     }
 

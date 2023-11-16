@@ -60,12 +60,10 @@ var Waveform = /** @class */ (function () {
         return this._waveClickCallback;
     };
     Waveform.prototype._addClickWaveListener = function () {
-        var _this = this;
-        this._canvasElement.addEventListener('click', function (event) { _this._canvasElementClick(event); });
+        this._canvasElement.addEventListener('click', this._canvasElementClick.bind(this));
     };
     Waveform.prototype._removeClickWaveListener = function () {
-        var _this = this;
-        this._canvasElement.removeEventListener('click', function (event) { _this._canvasElementClick(event); });
+        this._canvasElement.removeEventListener('click', this._canvasElementClick.bind(this));
     };
     Waveform.prototype._canvasElementClick = function (event) {
         if (this._waveClickCallback !== null) {
