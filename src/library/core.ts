@@ -178,6 +178,12 @@ export class Waveform {
 
         if (peaksLength === 0) {
             // nothing to draw
+            console.warn('can not draw, peaks array (waveData) is empty');
+            return;
+        }
+
+        if (range < 0 || range > 100) {
+            console.warn('range value must be >= 0 and <= 100');
             return;
         }
 
