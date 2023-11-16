@@ -42,7 +42,7 @@ export class Waveform {
     protected _waveData: number[];
     protected _waveLayoutOptions: IWaveLayoutOptions = Waveform.layoutOptions;
     protected _firstDrawing = true;
-    protected _latestRange: number;
+    protected _latestRange: number | null = null;
     protected _plugins: [] = [];
     protected _waveClickCallback: IWaveClickCallback | null = null;
 
@@ -89,6 +89,10 @@ export class Waveform {
     }
 
     public setWaveData(data: number[]): void {
+
+        // reset the _latestRange to allow a new
+        // draw even if the range did not change
+        this._latestRange = null;
 
         this._waveData = data;
 
@@ -165,12 +169,17 @@ export class Waveform {
      * 
      * @param range 
      */
-    public draw(range?: number): void {
+    public draw(range?: number, force = false): void {
 
         // measure fps
         //this.fps();
 
         const peaksLength = this._waveData.length;
+
+        if (peaksLength === 0) {
+            // nothing to draw
+            return;
+        }
 
         // the canvas width is the width of all the peaks, plus the width of
         // all the spaces, the amount of spaces is equal to the amount of peaks
@@ -186,7 +195,8 @@ export class Waveform {
             peaksRange = Math.round(range * peaksPercentage);
 
             // if the range did not change since last draw don't redraw
-            if (peaksRange === this._latestRange) {
+            // except if force is true
+            if (peaksRange === this._latestRange && !force) {
                 return;
             }
 
