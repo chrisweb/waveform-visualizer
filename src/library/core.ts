@@ -169,7 +169,7 @@ export class Waveform {
      * 
      * @param range 
      */
-    public draw(range?: number, force = false): void {
+    public draw(range: number = 0, force = false): void {
 
         // measure fps
         //this.fps();
@@ -188,21 +188,17 @@ export class Waveform {
 
         let peaksRange = 0;
 
-        if (range !== undefined) {
+        const peaksPercentage = peaksLength / 100;
 
-            const peaksPercentage = peaksLength / 100;
+        peaksRange = Math.round(range * peaksPercentage);
 
-            peaksRange = Math.round(range * peaksPercentage);
-
-            // if the range did not change since last draw don't redraw
-            // except if force is true
-            if (peaksRange === this._latestRange && !force) {
-                return;
-            }
-
-            this._latestRange = peaksRange;
-
+        // if the range did not change since last draw don't redraw
+        // except if force is true
+        if (peaksRange === this._latestRange && !force) {
+            return;
         }
+
+        this._latestRange = peaksRange;
 
         const canvasHeight = this._waveLayoutOptions.waveHeightInPixel;
 
