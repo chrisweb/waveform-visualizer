@@ -13,7 +13,6 @@ export class Server {
         const META = import.meta;
         const DIRNAME = typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(META.url));
         const ROOTPATH = path.join(DIRNAME, '..', '..');
-        console.log('ROOTPATH: ', ROOTPATH);
         this.application.use('/client', express.static(ROOTPATH + '/../client/build'));
         this.application.use('/dist', express.static(ROOTPATH + '/../../../dist'));
         this.application.use('/node_modules/web-audio-api-player/dist', express.static(ROOTPATH + '/../client/node_modules/web-audio-api-player/dist'));
