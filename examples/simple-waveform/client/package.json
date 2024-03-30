@@ -25,9 +25,9 @@
     "watch": "tsc -p ./ -w"
   },
   "dependencies": {
-    "web-audio-api-player": "5.2.1"
+    "web-audio-api-player": "5.3.1"
   },
   "devDependencies": {
-    "typescript": "5.3.2"
+    "typescript": "5.4.3"
   }
 }
