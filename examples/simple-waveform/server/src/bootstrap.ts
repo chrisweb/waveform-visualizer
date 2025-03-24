@@ -1,7 +1,7 @@
-﻿'use strict';
+﻿'use strict'
 
-import { Server } from './library/server';
+import { Server } from './library/server'
 
-const server = new Server();
+const server = new Server()
 
-server.run();
+server.run()
