@@ -17,12 +17,10 @@
     },
     "license": "MIT",
     "author": "chrisweb (https://chris.lu)",
-    "main": "build/bootstrap.js",
     "scripts": {
         "build": "tsc -p ./",
         "build:debug": "tsc -p ./ --listFiles --traceResolution",
-        "debug": "node --experimental-modules --es-module-specifier-resolution=node --nolazy --inspect-brk=9229 ./build/bootstrap",
-        "start": "node --experimental-modules --es-module-specifier-resolution=node ./build/bootstrap",
+        "start": "node ./build/server.js",
         "watch": "tsc -p ./ -w"
     },
     "dependencies": {

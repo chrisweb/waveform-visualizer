@@ -3,29 +3,22 @@
       "declaration": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
-      "module": "es6",
+      "module": "esnext",
       "moduleResolution": "node",
-      "rootDir": "./src",
-      "outDir": "dist",
-      "inlineSourceMap": true,
+      "strict": true,
       "declarationDir": "dist",
       "noImplicitAny": true,
       "noFallthroughCasesInSwitch": true,
       "skipDefaultLibCheck": true,
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true,
       "skipLibCheck": true,
-      "lib": [
-        "es5",
-        "es6",
-        "es7",
-        "esnext",
-        "dom"
-      ],
-      "target": "es5"
+      "lib": ["es2020", "dom"],
+      "target": "es2020"
     },
     "exclude": [
       "node_modules",
       "examples",
-      "scripts",
       "dist"
     ]
   }

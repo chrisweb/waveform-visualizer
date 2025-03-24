@@ -17,7 +17,6 @@
   },
   "license": "MIT",
   "author": "chrisweb (https://chris.lu)",
-  "main": "build/bootstrap.js",
   "scripts": {
     "build": "tsc -p ./",
     "build:debug": "tsc -p ./ --listFiles --traceResolution",

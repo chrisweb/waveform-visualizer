@@ -36,7 +36,7 @@ export declare class Waveform {
     setLayoutOptions(layout: IWaveLayoutOptions): void;
     getLayoutOptions(): IWaveLayoutOptions;
     setWaveformClickCallback(waveformClickCallback: IWaveClickCallback): void;
-    getWaveformClickCallback(): IWaveClickCallback;
+    getWaveformClickCallback(): IWaveClickCallback | null;
     protected _addClickWaveListener(): void;
     protected _removeClickWaveListener(): void;
     protected _canvasElementClick(event: MouseEvent): void;

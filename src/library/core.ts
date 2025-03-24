@@ -37,9 +37,9 @@ export class Waveform {
         peakBottomProgressFillStyle: '#ff901f'
     }
 
-    protected _canvasContext: CanvasRenderingContext2D
-    protected _canvasElement: HTMLCanvasElement
-    protected _waveData: number[]
+    protected _canvasContext!: CanvasRenderingContext2D
+    protected _canvasElement!: HTMLCanvasElement
+    protected _waveData: number[] = []
     protected _waveLayoutOptions: IWaveLayoutOptions = Waveform.layoutOptions
     protected _firstDrawing = true
     protected _latestRange: number | null = null
@@ -122,7 +122,7 @@ export class Waveform {
 
     }
 
-    public getWaveformClickCallback(): IWaveClickCallback {
+    public getWaveformClickCallback(): IWaveClickCallback | null {
 
         return this._waveClickCallback
 
@@ -190,7 +190,7 @@ export class Waveform {
         // the canvas width is the width of all the peaks, plus the width of
         // all the spaces, the amount of spaces is equal to the amount of peaks
         // minus one
-        const canvasWidth = (peaksLength * this._waveLayoutOptions.peakWidthInPixel) + ((peaksLength - 1) * this._waveLayoutOptions.spaceWidthInPixel)
+        const canvasWidth = (peaksLength * this._waveLayoutOptions.peakWidthInPixel!) + ((peaksLength - 1) * this._waveLayoutOptions.spaceWidthInPixel!)
 
         let peaksRange = 0
 
@@ -206,23 +206,23 @@ export class Waveform {
 
         this._latestRange = peaksRange
 
-        const canvasHeight = this._waveLayoutOptions.waveHeightInPixel
+        const canvasHeight = this._waveLayoutOptions.waveHeightInPixel!
 
         // canvas dimensions
         this._canvasElement.height = canvasHeight
         this._canvasElement.width = canvasWidth
 
         // each peak is the line and the line width is the peak width
-        this._canvasContext.lineWidth = this._waveLayoutOptions.peakWidthInPixel
+        this._canvasContext.lineWidth = this._waveLayoutOptions.peakWidthInPixel!
 
         // the max height of the top peaks
-        const topPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel * (this._waveLayoutOptions.waveTopPercentage / 100)
+        const topPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel! * (this._waveLayoutOptions.waveTopPercentage! / 100)
 
         // the max height of the bottom peaks
-        const bottomPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel * ((100 - this._waveLayoutOptions.waveTopPercentage) / 100)
+        const bottomPeakMaxHeightInPixel = this._waveLayoutOptions.waveHeightInPixel! * ((100 - this._waveLayoutOptions.waveTopPercentage!) / 100)
 
         // canvas background fill style
-        this._canvasContext.fillStyle = this._waveLayoutOptions.waveBackgroundFillStyle
+        this._canvasContext.fillStyle = this._waveLayoutOptions.waveBackgroundFillStyle || 'transparent'
         this._canvasContext.fillRect(0, 0, canvasWidth, canvasHeight)
 
         let i
@@ -234,20 +234,20 @@ export class Waveform {
 
             if (i < peaksRange) {
 
-                topStrokeFillStyle = this._waveLayoutOptions.peakTopProgressFillStyle
-                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomProgressFillStyle
+                topStrokeFillStyle = this._waveLayoutOptions.peakTopProgressFillStyle || '#ffd319'
+                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomProgressFillStyle || '#ff901f'
 
             } else {
 
-                topStrokeFillStyle = this._waveLayoutOptions.peakTopFillStyle
-                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomFillStyle
+                topStrokeFillStyle = this._waveLayoutOptions.peakTopFillStyle || '#f222ff'
+                bottomStrokeFillStyle = this._waveLayoutOptions.peakBottomFillStyle || '#ff2975'
 
             }
 
             const peakHeightInPercent = this._waveData[i]
 
             // the horizontal position of a peak
-            const peakHorizontalPosition = ((i + 1) * this._waveLayoutOptions.peakWidthInPixel) + (i * this._waveLayoutOptions.spaceWidthInPixel)
+            const peakHorizontalPosition = ((i + 1) * this._waveLayoutOptions.peakWidthInPixel!) + (i * this._waveLayoutOptions.spaceWidthInPixel!)
 
             // waveform top
             this._canvasContext.beginPath()

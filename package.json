@@ -27,17 +27,19 @@
     "example": "examples"
   },
   "scripts": {
-    "build": "rollup -c ./scripts/dist.js",
+    "build": "rollup --config rollup.config.ts --configPlugin typescript --configImportAttributesKey with",
     "lint": "npx eslint src/**/* examples/simple-waveform/client/src**/* examples/simple-waveform/server/src**/*",
     "lint-fix": "npx eslint src/**/* examples/simple-waveform/client/src**/* examples/simple-waveform/server/src**/* --fix"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "12.1.2",
+    "@types/node": "^22.13.13",
     "@typescript-eslint/eslint-plugin": "8.27.0",
     "@typescript-eslint/parser": "8.27.0",
     "eslint": "9.23.0",
     "eslint-plugin-import": "2.31.0",
     "rollup": "4.37.0",
-    "rollup-plugin-typescript2": "0.36.0",
     "typescript": "5.8.2"
   },
   "type": "module"

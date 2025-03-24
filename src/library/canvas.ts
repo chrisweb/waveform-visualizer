@@ -7,6 +7,10 @@ export class Canvas {
         }
 
         const canvasContext = element.getContext('2d')
+        
+        if (canvasContext === null) {
+            throw new Error('No context found')
+        }
 
         return canvasContext
 
