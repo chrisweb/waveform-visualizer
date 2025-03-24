@@ -1,7 +1,6 @@
 {
   "name": "waveform-visualizer_example_simple-waveform_client",
-  "version": "3.0.1",
-  "description": "(audio) waveform visualizer example simple waveform client",
+  "description": "waveform example client",
   "keywords": [
     "canvas",
     "javascript",
@@ -17,7 +16,7 @@
     "url": "git+https://github.com/chrisweb/waveform-visualizer.git"
   },
   "license": "MIT",
-  "author": "chrisweb <chris963@gmail.com> (https://chris.lu)",
+  "author": "chrisweb (https://chris.lu)",
   "main": "build/bootstrap.js",
   "scripts": {
     "build": "tsc -p ./",
@@ -25,9 +24,9 @@
     "watch": "tsc -p ./ -w"
   },
   "dependencies": {
-    "web-audio-api-player": "5.3.1"
+    "web-audio-api-player": "5.3.2"
   },
   "devDependencies": {
-    "typescript": "5.4.3"
+    "typescript": "5.8.2"
   }
 }

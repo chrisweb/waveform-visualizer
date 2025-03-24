@@ -1,7 +1,6 @@
 {
     "name": "waveform-visualizer_example_simple-waveform_server",
-    "version": "3.0.1",
-    "description": "(audio) waveform visualizer example simple waveform server",
+    "description": "waveform example server",
     "keywords": [
         "canvas",
         "javascript",
@@ -17,7 +16,7 @@
         "url": "git+https://github.com/chrisweb/waveform-visualizer.git"
     },
     "license": "MIT",
-    "author": "chrisweb <chris963@gmail.com> (https://chris.lu)",
+    "author": "chrisweb (https://chris.lu)",
     "main": "build/bootstrap.js",
     "scripts": {
         "build": "tsc -p ./",
@@ -27,12 +26,12 @@
         "watch": "tsc -p ./ -w"
     },
     "dependencies": {
-        "express": "4.19.2"
+        "express": "4.21.2"
     },
     "devDependencies": {
-        "@types/express": "4.17.21",
-        "@types/node": "20.12.2",
-        "typescript": "5.4.3"
+        "@types/express": "5.0.1",
+        "@types/node": "22.13.13",
+        "typescript": "5.8.2"
     },
     "type": "module"
 }
